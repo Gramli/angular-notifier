@@ -70,7 +70,7 @@
     "rxjs": "7.5.x",
     "sass": "1.54.x",
     "ts-node": "10.9.x",
-    "typescript": "^5.6.2",
+    "typescript": "^5.4.5",
     "zone.js": "^0.14.10"
   }
 }
