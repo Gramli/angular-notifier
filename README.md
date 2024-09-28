@@ -4,6 +4,8 @@
 
 # angular-notifier
 
+[![Build&Test](https://github.com/Gramli/angular-notifier/actions/workflows/ci.yml/badge.svg)](https://github.com/Gramli/angular-notifier/actions/workflows/ci.yml)
+
 </div>
 
 ## Demo
