@@ -4,11 +4,7 @@
 
 # angular-notifier
 
-**A well designed, fully animated, highly customizable, and easy-to-use notification library for your **Angular 2+** application.**
-
 </div>
-
-<br><br>
 
 ## Demo
 
