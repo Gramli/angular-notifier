@@ -1,7 +1,7 @@
 {
   "name": "gramli-angular-notifier",
   "description": "A well designed, fully animated, highly customizable, and easy-to-use notification library for your Angular application.",
-  "version": "16.0.0",
+  "version": "16.0.1",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -25,7 +25,7 @@
     "build:library": "rimraf -r dist && npm run build:library:angular && npm run build:library:sass && npm run build:library:css && npm run build:library:docs && npm run build:library:package",
     "build:library:angular": "ng build angular-notifier --configuration production",
     "build:library:css": "sass projects/angular-notifier/src:dist/angular-notifier --style=expanded",
-    "build:library:docs": "copyfiles \"docs/**\" CHANGELOG.md MIGRATION-GUIDE.md LICENSE README.md \"dist/angular-notifier\"",
+    "build:library:docs": "copyfiles \"docs/**\" LICENSE README.md \"dist/angular-notifier\"",
     "build:library:package": "node tools/update-package.js",
     "build:library:sass": "copyfiles \"projects/angular-notifier/src/**/*.scss\" \"dist/angular-notifier\" --up 3",
     "lint:library": "eslint projects/angular-notifier/src/**/*.ts --max-warnings 0",
