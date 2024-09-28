@@ -32,6 +32,7 @@ The following list describes the compatibility with Angular:
 | Angular Notifier | Angular | Compilation        |
 | ---------------- | ------- | ------------------ |
 | `15.x`           | `17.x`  | Ivy (partial mode) |
+| `16.x`           | `18.x`  | Ivy (partial mode) |
 
 For older versions visit:
 https://github.com/dominique-mueller/angular-notifier
