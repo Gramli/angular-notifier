@@ -56,5 +56,3 @@ jobs:
       run: npm ci
     - name: Test library
       run: npm run test:library
-    - name: Upload test coverage
-      run: npm run test:library:upload-coverage
