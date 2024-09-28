@@ -22,7 +22,7 @@ You can get **angular-notifier** via **npm** by either adding it as a new _depen
 or running the following command:
 
 ```bash
-npm install angular-notifier
+npm install gramli-angular-notifier
 ```
 
 <br>
@@ -54,7 +54,7 @@ First of all, make **angular-notifier** globally available to your Angular appli
 `NotifierModule` the your root Angular module. For example:
 
 ```typescript
-import { NotifierModule } from 'angular-notifier';
+import { NotifierModule } from 'gramli-angular-notifier';
 
 @NgModule({
   imports: [NotifierModule],
@@ -66,7 +66,7 @@ But wait -- your probably might want to customize your notifications' look and b
 call the `withConfig` method on the `NotifierModule`, and pass in the options. For example:
 
 ```typescript
-import { NotifierModule } from 'angular-notifier';
+import { NotifierModule } from 'gramli-angular-notifier';
 
 @NgModule({
   imports: [
@@ -108,7 +108,7 @@ write your own styles from scratch.
 
 #### The easy way: Import all the styles
 
-To import all the styles, simple include either the `~/angular-notifier/styles.(scss|css)` file. It contains the core styles as well as all
+To import all the styles, simple include either the `~/gramli-angular-notifier/styles.(scss|css)` file. It contains the core styles as well as all
 the themes and notification types.
 
 #### The advanced way: Only import the styles actually needed
@@ -116,9 +116,9 @@ the themes and notification types.
 To keep the size if your styles as small as possible (improving performance for the perfect UX), your might instead decide to only import
 the styles actually needed by our application. The **angular-notifier** styles are modular:
 
-- The `~/angular-notifier/styles/core.(scss|css)` file is always required, it defines the basic styles (such as the layout)
-- Themes can be imported from the `~/angular-notifier/styles/theme` folder
-- The different notification types, then, can be imported from the `~/angular-notifier/styles/types` folder
+- The `~/gramli-angular-notifier/styles/core.(scss|css)` file is always required, it defines the basic styles (such as the layout)
+- Themes can be imported from the `~/gramli-angular-notifier/styles/theme` folder
+- The different notification types, then, can be imported from the `~/gramli-angular-notifier/styles/types` folder
 
 <br><br><br>
 
@@ -128,7 +128,7 @@ Using **angular-notifier** is as simple as it can get -- simple import and injec
 service, ...) you want to use in. For example:
 
 ```typescript
-import { NotifierService } from 'angular-notifier';
+import { NotifierService } from 'gramli-angular-notifier';
 
 @Component({
   // ...
