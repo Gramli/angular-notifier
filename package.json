@@ -37,20 +37,17 @@
   "dependencies": {
     "tslib": "2.4.x"
   },
-  "peerDependencies": {
-    "@angular/common": ">= 16.0.0 < 17.0.0",
-    "@angular/core": ">= 16.0.0 < 17.0.0"
-  },
+  "peerDependencies": {},
   "devDependencies": {
     "@angular-builders/jest": "^17.0.3",
-    "@angular-devkit/build-angular": "16.0.x",
-    "@angular/cli": "16.0.x",
-    "@angular/common": "16.0.x",
-    "@angular/compiler": "16.0.x",
-    "@angular/compiler-cli": "16.0.x",
-    "@angular/core": "16.0.x",
-    "@angular/platform-browser": "16.0.x",
-    "@angular/platform-browser-dynamic": "16.0.x",
+    "@angular-devkit/build-angular": "17.3.10",
+    "@angular/cli": "17.3.10",
+    "@angular/common": "17.3.12",
+    "@angular/compiler": "17.3.12",
+    "@angular/compiler-cli": "17.3.12",
+    "@angular/core": "17.3.12",
+    "@angular/platform-browser": "17.3.12",
+    "@angular/platform-browser-dynamic": "17.3.12",
     "@types/jest": "29.5.x",
     "@types/node": "16.x",
     "@types/web-animations-js": "2.2.x",
@@ -64,7 +61,7 @@
     "eslint-plugin-prettier": "4.2.x",
     "eslint-plugin-simple-import-sort": "8.0.x",
     "jest": "29.5.x",
-    "ng-packagr": "16.0.x",
+    "ng-packagr": "17.3.0",
     "prettier": "2.7.x",
     "rimraf": "3.0.x",
     "rxjs": "7.5.x",
