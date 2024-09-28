@@ -1,4 +1,4 @@
-## Forked from https://github.com/dominique-mueller/angular-notifier to update for actual Angular versions
+## Forked from https://github.com/dominique-mueller/angular-notifier to update for actual Angular versions.
 
 <div align="center">
 
@@ -35,20 +35,10 @@ The following list describes the compatibility with Angular:
 
 | Angular Notifier | Angular | Compilation        |
 | ---------------- | ------- | ------------------ |
-| `1.x`            | `2.x`   | View Engine        |
-| `2.x`            | `4.x`   | View Engine        |
-| `3.x`            | `5.x`   | View Engine        |
-| `4.x`            | `6.x`   | View Engine        |
-| `5.x`            | `7.x`   | View Engine        |
-| `6.x`            | `8.x`   | View Engine        |
-| `7.x`            | `9.x`   | View Engine        |
-| `8.x`            | `10.x`  | View Engine        |
-| `9.x`            | `11.x`  | View Engine        |
-| `10.x`           | `12.x`  | View Engine        |
-| `11.x`           | `13.x`  | Ivy (partial mode) |
-| `12.x`           | `14.x`  | Ivy (partial mode) |
-| `13.x`           | `15.x`  | Ivy (partial mode) |
-| `14.x`           | `16.x`  | Ivy (partial mode) |
+| `15.x`           | `17.x`  | Ivy (partial mode) |
+
+For older versions visit:
+https://github.com/dominique-mueller/angular-notifier
 
 <br><br><br>
 

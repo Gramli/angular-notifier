@@ -1,11 +1,11 @@
 {
-  "name": "angular-notifier",
+  "name": "gramli-angular-notifier",
   "description": "A well designed, fully animated, highly customizable, and easy-to-use notification library for your Angular application.",
-  "version": "14.0.0",
+  "version": "15.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dominique-mueller/angular-notifier"
+    "url": "https://github.com/Gramli/angular-notifier"
   },
   "keywords": [
     "angular",
