@@ -1,5 +1,5 @@
 import { Component, DebugElement, Injectable, NO_ERRORS_SCHEMA, TemplateRef, ViewChild } from '@angular/core';
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { NotifierAnimationData } from '../models/notifier-animation.model';
@@ -64,7 +64,7 @@ describe('Notifier Notification Component', () => {
       expect(componentFixture.nativeElement.classList.contains(classNameTheme)).toBeTruthy();
     });
 
-    it('should render the custom template if provided by the user', async(() => {
+    it('should render the custom template if provided by the user', waitForAsync(() => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         position: {
