@@ -1,3 +1,5 @@
+## Forked from https://github.com/dominique-mueller/angular-notifier to update for actual Angular versions
+
 <div align="center">
 
 # angular-notifier
