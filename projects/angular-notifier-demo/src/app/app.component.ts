@@ -10,6 +10,7 @@ import { NotifierService } from 'angular-notifier';
   },
   selector: 'app',
   templateUrl: './app.component.html',
+  standalone: false
 })
 export class AppComponent {
   @ViewChild('customTemplate', { static: true }) customNotificationTmpl;
