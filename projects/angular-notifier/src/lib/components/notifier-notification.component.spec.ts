@@ -1070,7 +1070,7 @@ class MockNotifierTimerService extends NotifierTimerService {
   }
 }
 
-@Component({ selector: 'test-cmp', template: '' })
+@Component({ selector: 'test-cmp', template: '', standalone: false })
 class TestComponent {
   @ViewChild('tpl', { static: true })
   currentTplRef: TemplateRef<any>;
