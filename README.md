@@ -35,6 +35,7 @@ The following list describes the compatibility with Angular:
 | ---------------- | ------- | ------------------ |
 | `15.x`           | `17.x`  | Ivy (partial mode) |
 | `16.x`           | `18.x`  | Ivy (partial mode) |
+| `17.x`           | `19.x`  | Ivy (partial mode) |
 
 For older versions visit:
 https://github.com/dominique-mueller/angular-notifier

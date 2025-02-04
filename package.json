@@ -1,7 +1,7 @@
 {
   "name": "gramli-angular-notifier",
   "description": "A well designed, fully animated, highly customizable, and easy-to-use notification library for your Angular application.",
-  "version": "16.0.2",
+  "version": "17.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -40,15 +40,15 @@
   "devDependencies": {
     "@angular-builders/jest": "^19.0.0",
     "@angular-devkit/build-angular": "19.1.5",
-    "@angular/cli": "18.2.6",
-    "@angular/common": "18.2.6",
-    "@angular/compiler": "18.2.6",
-    "@angular/compiler-cli": "18.2.6",
-    "@angular/core": "18.2.6",
-    "@angular/platform-browser": "18.2.6",
-    "@angular/platform-browser-dynamic": "18.2.6",
+    "@angular/cli": "19.1.5",
+    "@angular/common": "19.1.4",
+    "@angular/compiler": "19.1.4",
+    "@angular/compiler-cli": "19.1.4",
+    "@angular/core": "19.1.4",
+    "@angular/platform-browser": "19.1.4",
+    "@angular/platform-browser-dynamic": "19.1.4",
     "@types/jest": "29.5.x",
-    "@types/node": "16.x",
+    "@types/node": "22.13.1",
     "@types/web-animations-js": "2.2.x",
     "@typescript-eslint/eslint-plugin": "5.59.x",
     "@typescript-eslint/parser": "5.59.x",
@@ -60,13 +60,13 @@
     "eslint-plugin-prettier": "4.2.x",
     "eslint-plugin-simple-import-sort": "8.0.x",
     "jest": "29.5.x",
-    "ng-packagr": "18.2.1",
+    "ng-packagr": "19.1.2",
     "prettier": "2.7.x",
     "rimraf": "3.0.x",
     "rxjs": "7.5.x",
     "sass": "1.54.x",
     "ts-node": "10.9.x",
     "typescript": "^5.4.5",
-    "zone.js": "^0.14.10"
+    "zone.js": "^0.15.0"
   }
 }
