@@ -1,7 +1,7 @@
 import { DebugElement, Injectable, NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { NotifierAction } from '../models/notifier-action.model';
 import { NotifierConfig } from '../models/notifier-config.model';
 import { NotifierConfigToken } from '../notifier.tokens';
@@ -17,6 +17,15 @@ describe('Notifier Container Component', () => {
   let componentInstance: NotifierContainerComponent;
   let queueService: MockNotifierQueueService;
 
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.useRealTimers();
+  });
+
   it('should instantiate', () => {
     // Setup test module
     beforeEachWithConfig(new NotifierConfig());
@@ -30,28 +39,28 @@ describe('Notifier Container Component', () => {
     componentFixture.detectChanges();
   });
 
-  it('should ignore unknown actions', fakeAsync(() => {
+  it('should ignore unknown actions', async () => {
     // Setup test module
     beforeEachWithConfig(new NotifierConfig());
     componentFixture.detectChanges();
-    jest.spyOn(queueService, 'continue');
+    vi.spyOn(queueService, 'continue');
 
     queueService.push(<any>{
       payload: 'STUFF',
       type: 'WHATEVS',
     });
     componentFixture.detectChanges();
-    tick();
+    await vi.advanceTimersByTimeAsync(0);
 
     expect(queueService.continue).toHaveBeenCalled();
-  }));
+  });
 
   describe('(show)', () => {
-    it('should show the first notification', fakeAsync(() => {
+    it('should show the first notification', async () => {
       // Setup test module
       beforeEachWithConfig(new NotifierConfig());
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       queueService.push({
         payload: {
@@ -66,16 +75,16 @@ describe('Notifier Container Component', () => {
       expect(listElements.length).toBe(1);
 
       const mockNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockNotificationComponent, 'show'); // Continue
+      vi.spyOn(mockNotificationComponent, 'show'); // Continue
       componentInstance.onNotificationReady(<any>mockNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       expect(mockNotificationComponent.show).toHaveBeenCalled();
       expect(queueService.continue).toHaveBeenCalled();
-    }));
+    });
 
-    it('should switch out the old notification with the new one when stacking is disabled', fakeAsync(() => {
+    it('should switch out the old notification with the new one when stacking is disabled', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -96,10 +105,10 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockFirstNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockFirstNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       // Create the second notification
       queueService.push({
@@ -111,16 +120,16 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockSecondNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockSecondNotificationComponent, 'show'); // Continue
+      vi.spyOn(mockSecondNotificationComponent, 'show'); // Continue
       componentInstance.onNotificationReady(<any>mockSecondNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       expect(mockFirstNotificationComponent.hide).toHaveBeenCalled();
       expect(mockSecondNotificationComponent.show).toHaveBeenCalled();
-    }));
+    });
 
-    it('should hide and shift before showing the notification when stacking is enabled', fakeAsync(() => {
+    it('should hide and shift before showing the notification when stacking is enabled', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -144,10 +153,10 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockFirstNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockFirstNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       // Create the second notification
       queueService.push({
@@ -159,10 +168,10 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockSecondNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockSecondNotificationComponent, 'shift'); // Continue
+      vi.spyOn(mockSecondNotificationComponent, 'shift'); // Continue
       componentInstance.onNotificationReady(<any>mockSecondNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       // Create the third notification
       queueService.push({
@@ -174,17 +183,17 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockThirdNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockThirdNotificationComponent, 'show'); // Continue
+      vi.spyOn(mockThirdNotificationComponent, 'show'); // Continue
       componentInstance.onNotificationReady(<any>mockThirdNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       expect(mockFirstNotificationComponent.hide).toHaveBeenCalled();
       expect(mockSecondNotificationComponent.shift).toHaveBeenCalled();
       expect(mockThirdNotificationComponent.show).toHaveBeenCalled();
-    }));
+    });
 
-    it('should hide and shift before showing the notification, when stacking is enabled (with animations)', fakeAsync(() => {
+    it('should hide and shift before showing the notification, when stacking is enabled (with animations)', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         animations: {
@@ -207,10 +216,10 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockFirstNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockFirstNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       // Create the second notification
       queueService.push({
@@ -222,10 +231,10 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockSecondNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockSecondNotificationComponent, 'shift'); // Continue
+      vi.spyOn(mockSecondNotificationComponent, 'shift'); // Continue
       componentInstance.onNotificationReady(<any>mockSecondNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       // Create the third notification
       queueService.push({
@@ -237,17 +246,17 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockThirdNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockThirdNotificationComponent, 'show'); // Continue
+      vi.spyOn(mockThirdNotificationComponent, 'show'); // Continue
       componentInstance.onNotificationReady(<any>mockThirdNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       expect(mockFirstNotificationComponent.hide).toHaveBeenCalled();
       expect(mockSecondNotificationComponent.shift).toHaveBeenCalled();
       expect(mockThirdNotificationComponent.show).toHaveBeenCalled();
-    }));
+    });
 
-    it('should hide and shift before showing the notification, when tacking is enabled (with overlapping animations)', fakeAsync(() => {
+    it('should hide and shift before showing the notification, when tacking is enabled (with overlapping animations)', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         behaviour: {
@@ -267,10 +276,10 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockFirstNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockFirstNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       // Create the second notification
       queueService.push({
@@ -282,10 +291,10 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockSecondNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockSecondNotificationComponent, 'shift'); // Continue
+      vi.spyOn(mockSecondNotificationComponent, 'shift'); // Continue
       componentInstance.onNotificationReady(<any>mockSecondNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       // Create the third notification
       queueService.push({
@@ -297,10 +306,10 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockThirdNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockThirdNotificationComponent, 'show'); // Continue
+      vi.spyOn(mockThirdNotificationComponent, 'show'); // Continue
       componentInstance.onNotificationReady(<any>mockThirdNotificationComponent); // Trigger the ready event manually
 
-      tick(
+      await vi.advanceTimersByTimeAsync(
         testNotifierConfig.animations.hide.speed +
           testNotifierConfig.animations.shift.speed -
           <number>testNotifierConfig.animations.overlap,
@@ -309,11 +318,11 @@ describe('Notifier Container Component', () => {
       expect(mockFirstNotificationComponent.hide).toHaveBeenCalled();
       expect(mockSecondNotificationComponent.shift).toHaveBeenCalled();
       expect(mockThirdNotificationComponent.show).toHaveBeenCalled();
-    }));
+    });
   });
 
   describe('(hide)', () => {
-    it('should hide one notification', fakeAsync(() => {
+    it('should hide one notification', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -323,7 +332,7 @@ describe('Notifier Container Component', () => {
         }),
       );
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       const testNotificationId = 'FAKE_ID';
 
@@ -338,10 +347,10 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       // Hide notification
       queueService.push({
@@ -350,7 +359,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
       componentFixture.detectChanges(); // Run a second change detection (to update the template)
 
       const listElements: Array<DebugElement> = componentFixture.debugElement.queryAll(By.css('.notifier__container-list-item'));
@@ -358,9 +367,9 @@ describe('Notifier Container Component', () => {
       expect(listElements.length).toBe(0);
       expect(mockNotificationComponent.hide).toHaveBeenCalled();
       expect(queueService.continue).toHaveBeenCalled();
-    }));
+    });
 
-    it('should skip if the notification to hide does not exist', fakeAsync(() => {
+    it('should skip if the notification to hide does not exist', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -370,7 +379,7 @@ describe('Notifier Container Component', () => {
         }),
       );
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       // Show first notification
       queueService.push({
@@ -383,10 +392,10 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockNotificationComponent); // Trigger the ready event manually
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       // Hide notification
       queueService.push({
@@ -394,7 +403,7 @@ describe('Notifier Container Component', () => {
         type: 'HIDE',
       });
       componentFixture.detectChanges();
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
       componentFixture.detectChanges(); // Run a second change detection (to update the template)
 
       const listElements: Array<DebugElement> = componentFixture.debugElement.queryAll(By.css('.notifier__container-list-item'));
@@ -402,9 +411,9 @@ describe('Notifier Container Component', () => {
       expect(listElements.length).toBe(1);
       expect(mockNotificationComponent.hide).not.toHaveBeenCalled();
       expect(queueService.continue).toHaveBeenCalled();
-    }));
+    });
 
-    it('should shift before hiding the notification if necessary', fakeAsync(() => {
+    it('should shift before hiding the notification if necessary', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -414,7 +423,7 @@ describe('Notifier Container Component', () => {
         }),
       );
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       // Show first notification
       queueService.push({
@@ -426,7 +435,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockFirstNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockFirstNotificationComponent, 'shift'); // Continue
+      vi.spyOn(mockFirstNotificationComponent, 'shift'); // Continue
       componentInstance.onNotificationReady(<any>mockFirstNotificationComponent); // Trigger the ready event manually
 
       // Show second notification
@@ -441,7 +450,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockSecondNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockSecondNotificationComponent); // Trigger the ready event manually
 
       // Hide second notification
@@ -451,7 +460,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
       componentFixture.detectChanges(); // Run a second change detection (to update the template)
 
       const listElements: Array<DebugElement> = componentFixture.debugElement.queryAll(By.css('.notifier__container-list-item'));
@@ -461,9 +470,9 @@ describe('Notifier Container Component', () => {
       expect(mockFirstNotificationComponent.shift).toHaveBeenCalled();
       expect(mockSecondNotificationComponent.hide).toHaveBeenCalled();
       expect(queueService.continue).toHaveBeenCalledTimes(expectedCallTimes);
-    }));
+    });
 
-    it('should shift before hiding the notification if necessary (with animations)', fakeAsync(() => {
+    it('should shift before hiding the notification if necessary (with animations)', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         animations: {
@@ -472,7 +481,7 @@ describe('Notifier Container Component', () => {
       });
       beforeEachWithConfig(testNotifierConfig);
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       // Show first notification
       queueService.push({
@@ -484,7 +493,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockFirstNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockFirstNotificationComponent, 'shift'); // Continue
+      vi.spyOn(mockFirstNotificationComponent, 'shift'); // Continue
       componentInstance.onNotificationReady(<any>mockFirstNotificationComponent); // Trigger the ready event manually
 
       // Show second notification
@@ -499,7 +508,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockSecondNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockSecondNotificationComponent); // Trigger the ready event manually
 
       // Hide second notification
@@ -509,7 +518,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
 
-      tick(testNotifierConfig.animations.hide.speed);
+      await vi.advanceTimersByTimeAsync(testNotifierConfig.animations.hide.speed);
       componentFixture.detectChanges(); // Run a second change detection (to update the template)
 
       const listElements: Array<DebugElement> = componentFixture.debugElement.queryAll(By.css('.notifier__container-list-item'));
@@ -519,14 +528,14 @@ describe('Notifier Container Component', () => {
       expect(mockFirstNotificationComponent.shift).toHaveBeenCalled();
       expect(mockSecondNotificationComponent.hide).toHaveBeenCalled();
       expect(queueService.continue).toHaveBeenCalledTimes(expectedCallTimes);
-    }));
+    });
 
-    it('should shift before hiding the notification if necessary (with overlapping animations)', fakeAsync(() => {
+    it('should shift before hiding the notification if necessary (with overlapping animations)', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig();
       beforeEachWithConfig(testNotifierConfig);
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       // Show first notification
       queueService.push({
@@ -538,7 +547,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockFirstNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockFirstNotificationComponent, 'shift'); // Continue
+      vi.spyOn(mockFirstNotificationComponent, 'shift'); // Continue
       componentInstance.onNotificationReady(<any>mockFirstNotificationComponent); // Trigger the ready event manually
 
       // Show second notification
@@ -553,7 +562,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockSecondNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockSecondNotificationComponent); // Trigger the ready event manually
 
       // Hide second notification
@@ -563,7 +572,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
 
-      tick(testNotifierConfig.animations.hide.speed - <number>testNotifierConfig.animations.overlap);
+      await vi.advanceTimersByTimeAsync(testNotifierConfig.animations.hide.speed - <number>testNotifierConfig.animations.overlap);
       componentFixture.detectChanges(); // Run a second change detection (to update the template)
 
       const listElements: Array<DebugElement> = componentFixture.debugElement.queryAll(By.css('.notifier__container-list-item'));
@@ -573,9 +582,9 @@ describe('Notifier Container Component', () => {
       expect(mockFirstNotificationComponent.shift).toHaveBeenCalled();
       expect(mockSecondNotificationComponent.hide).toHaveBeenCalled();
       expect(queueService.continue).toHaveBeenCalledTimes(expectedCallTimes);
-    }));
+    });
 
-    it('should hide the notification when the dismiss event gets dispatched', fakeAsync(() => {
+    it('should hide the notification when the dismiss event gets dispatched', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -585,7 +594,7 @@ describe('Notifier Container Component', () => {
         }),
       );
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       // Show second notification
       const testNotificationId = 'FAKE_ID';
@@ -599,12 +608,12 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockNotificationComponent); // Trigger the ready event manually
 
       // Hide second notification
       componentInstance.onNotificationDismiss(testNotificationId);
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
       componentFixture.detectChanges();
 
       const listElements: Array<DebugElement> = componentFixture.debugElement.queryAll(By.css('.notifier__container-list-item'));
@@ -613,11 +622,11 @@ describe('Notifier Container Component', () => {
       expect(listElements.length).toBe(0);
       expect(mockNotificationComponent.hide).toHaveBeenCalled();
       expect(queueService.continue).toHaveBeenCalledTimes(expectedCallTimes);
-    }));
+    });
   });
 
   describe('(hide oldest / newest)', () => {
-    it('should hide the oldest notification', fakeAsync(() => {
+    it('should hide the oldest notification', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -627,7 +636,7 @@ describe('Notifier Container Component', () => {
         }),
       );
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       // Show first notification
       queueService.push({
@@ -640,7 +649,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockFirstNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockFirstNotificationComponent); // Trigger the ready event manually
 
       // Show first notification
@@ -653,7 +662,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockSecondNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockSecondNotificationComponent); // Trigger the ready event manually
 
       // Hide second notification
@@ -662,7 +671,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
       componentFixture.detectChanges(); // Run a second change detection (to update the template)
 
       const listElements: Array<DebugElement> = componentFixture.debugElement.queryAll(By.css('.notifier__container-list-item'));
@@ -672,9 +681,9 @@ describe('Notifier Container Component', () => {
       expect(mockFirstNotificationComponent.hide).toHaveBeenCalled();
       expect(mockSecondNotificationComponent.hide).not.toHaveBeenCalled();
       expect(queueService.continue).toHaveBeenCalledTimes(expectedCallTimes);
-    }));
+    });
 
-    it('should skip hiding the oldest notification if there are no notifications', fakeAsync(() => {
+    it('should skip hiding the oldest notification if there are no notifications', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -684,19 +693,19 @@ describe('Notifier Container Component', () => {
         }),
       );
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       // Hide notification
       queueService.push({
         type: 'HIDE_OLDEST',
       });
       componentFixture.detectChanges();
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       expect(queueService.continue).toHaveBeenCalled();
-    }));
+    });
 
-    it('should hide the newest notification', fakeAsync(() => {
+    it('should hide the newest notification', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -706,7 +715,7 @@ describe('Notifier Container Component', () => {
         }),
       );
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       // Show first notification
       queueService.push({
@@ -718,7 +727,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockFirstNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockFirstNotificationComponent); // Trigger the ready event manually
 
       // Show first notification
@@ -732,7 +741,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockSecondNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockSecondNotificationComponent); // Trigger the ready event manually
 
       // Hide second notification
@@ -741,7 +750,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
       componentFixture.detectChanges(); // Run a second change detection (to update the template)
 
       const listElements: Array<DebugElement> = componentFixture.debugElement.queryAll(By.css('.notifier__container-list-item'));
@@ -751,9 +760,9 @@ describe('Notifier Container Component', () => {
       expect(mockFirstNotificationComponent.hide).not.toHaveBeenCalled();
       expect(mockSecondNotificationComponent.hide).toHaveBeenCalled();
       expect(queueService.continue).toHaveBeenCalledTimes(expectedCallTimes);
-    }));
+    });
 
-    it('should skip hiding the newest notification if there are no notifications', fakeAsync(() => {
+    it('should skip hiding the newest notification if there are no notifications', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -763,21 +772,21 @@ describe('Notifier Container Component', () => {
         }),
       );
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       // Hide notification
       queueService.push({
         type: 'HIDE_NEWEST',
       });
       componentFixture.detectChanges();
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       expect(queueService.continue).toHaveBeenCalled();
-    }));
+    });
   });
 
   describe('(hide all)', () => {
-    it('should hide all notifications', fakeAsync(() => {
+    it('should hide all notifications', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -787,7 +796,7 @@ describe('Notifier Container Component', () => {
         }),
       );
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       // Show first notification
       queueService.push({
@@ -799,7 +808,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockFirstNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockFirstNotificationComponent); // Trigger the ready event manually
 
       // Show first notification
@@ -812,7 +821,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockSecondNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockSecondNotificationComponent); // Trigger the ready event manually
 
       // Hide second notification
@@ -821,7 +830,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
 
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
       componentFixture.detectChanges(); // Run a second change detection (to update the template)
 
       const listElements: Array<DebugElement> = componentFixture.debugElement.queryAll(By.css('.notifier__container-list-item'));
@@ -831,14 +840,14 @@ describe('Notifier Container Component', () => {
       expect(mockFirstNotificationComponent.hide).toHaveBeenCalled();
       expect(mockSecondNotificationComponent.hide).toHaveBeenCalled();
       expect(queueService.continue).toHaveBeenCalledTimes(expectedCallTimes);
-    }));
+    });
 
-    it('should hide all notifications (with animations)', fakeAsync(() => {
+    it('should hide all notifications (with animations)', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig();
       beforeEachWithConfig(testNotifierConfig);
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       // Show first notification
       queueService.push({
@@ -850,7 +859,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockFirstNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockFirstNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockFirstNotificationComponent); // Trigger the ready event manually
 
       // Show first notification
@@ -863,7 +872,7 @@ describe('Notifier Container Component', () => {
       });
       componentFixture.detectChanges();
       const mockSecondNotificationComponent: MockNotifierNotificationComponent = new MockNotifierNotificationComponent();
-      jest.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
+      vi.spyOn(mockSecondNotificationComponent, 'hide'); // Continue
       componentInstance.onNotificationReady(<any>mockSecondNotificationComponent); // Trigger the ready event manually
 
       // Hide second notification
@@ -873,7 +882,7 @@ describe('Notifier Container Component', () => {
       componentFixture.detectChanges();
 
       const numberOfNotifications = 2;
-      tick(testNotifierConfig.animations.hide.speed + numberOfNotifications * <number>testNotifierConfig.animations.hide.offset);
+      await vi.advanceTimersByTimeAsync(testNotifierConfig.animations.hide.speed + numberOfNotifications * <number>testNotifierConfig.animations.hide.offset);
       componentFixture.detectChanges(); // Run a second change detection (to update the template)
 
       const listElements: Array<DebugElement> = componentFixture.debugElement.queryAll(By.css('.notifier__container-list-item'));
@@ -883,9 +892,9 @@ describe('Notifier Container Component', () => {
       expect(mockFirstNotificationComponent.hide).toHaveBeenCalled();
       expect(mockSecondNotificationComponent.hide).toHaveBeenCalled();
       expect(queueService.continue).toHaveBeenCalledTimes(expectedCallTimes);
-    }));
+    });
 
-    it('should skip hiding all notification if there are no notifications', fakeAsync(() => {
+    it('should skip hiding all notification if there are no notifications', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -895,17 +904,17 @@ describe('Notifier Container Component', () => {
         }),
       );
       componentFixture.detectChanges();
-      jest.spyOn(queueService, 'continue');
+      vi.spyOn(queueService, 'continue');
 
       // Hide notification
       queueService.push({
         type: 'HIDE_ALL',
       });
       componentFixture.detectChanges();
-      tick();
+      await vi.advanceTimersByTimeAsync(0);
 
       expect(queueService.continue).toHaveBeenCalled();
-    }));
+    });
   });
 
   /**

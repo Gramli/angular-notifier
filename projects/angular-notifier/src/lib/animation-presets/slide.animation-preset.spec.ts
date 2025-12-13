@@ -1,6 +1,7 @@
 import { NotifierAnimationPresetKeyframes } from '../models/notifier-animation.model';
 import { NotifierConfig } from '../models/notifier-config.model';
 import { slide } from './slide.animation-preset';
+import { describe, expect, it } from 'vitest';
 
 /**
  * Slide Animation Preset - Unit Test

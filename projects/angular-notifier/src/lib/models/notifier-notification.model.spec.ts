@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import { NotifierNotification } from './notifier-notification.model';
 
 /**
@@ -22,8 +23,14 @@ describe('Notifier Notification Model', () => {
 
   it('should generate a notification ID automatically, if not defined', () => {
     // Mock the date (as the ID generation is based on it)
+    const RealDate = Date;
     const mockDate: MockDate = new MockDate();
-    jest.spyOn(<any>window, 'Date').mockImplementation(() => mockDate);
+    vi.spyOn(global as any, 'Date').mockImplementation(function (this: any) {
+      if (this instanceof Date) {
+        return mockDate;
+      }
+      return new RealDate();
+    } as any);
 
     const testNotifierNotification: NotifierNotification = new NotifierNotification({
       message: testNotificationMessage,
@@ -52,3 +59,4 @@ class MockDate extends Date {
     return mockCurrentTime;
   }
 }
+

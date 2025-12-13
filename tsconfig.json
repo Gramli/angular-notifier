@@ -7,6 +7,7 @@
     "esModuleInterop": true,
     "declaration": false,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "module": "es2020",
     "moduleResolution": "bundler",
     "importHelpers": true,

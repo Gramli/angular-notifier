@@ -1,5 +1,5 @@
-import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
-
+import { inject, TestBed } from '@angular/core/testing';
+import { describe, beforeEach, afterEach, expect, it, vi } from 'vitest';
 import { NotifierTimerService } from './notifier-timer.service';
 
 /**
@@ -18,6 +18,13 @@ describe('Notifier Timer Service', () => {
     TestBed.configureTestingModule({
       providers: [NotifierTimerService],
     });
+    vi.useFakeTimers();
+  });
+
+  // Cleanup fake timers
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.useRealTimers();
   });
 
   // Inject dependencies
@@ -30,51 +37,62 @@ describe('Notifier Timer Service', () => {
     expect(timerService).toBeDefined();
   });
 
-  it('should start and stop the timer', fakeAsync(() => {
-    const timerServiceCallback = jest.fn();
-    timerService.start(fullAnimationTime).then(timerServiceCallback);
+  it('should start and stop the timer', async () => {
+    const timerServiceCallback = vi.fn();
+    const promise = timerService.start(fullAnimationTime).then(timerServiceCallback);
 
-    tick(longAnimationTime);
+    await vi.advanceTimersByTimeAsync(longAnimationTime);
 
     expect(timerServiceCallback).not.toHaveBeenCalled();
 
-    tick(shortAnimationTime);
+    await vi.advanceTimersByTimeAsync(shortAnimationTime);
+    await promise;
 
     expect(timerServiceCallback).toHaveBeenCalled();
-  }));
+  });
 
-  it('should pause and resume the timer', fakeAsync(() => {
-    jest.spyOn(<any>window, 'Date').mockImplementation(() => mockDate);
-    const timerServiceCallback = jest.fn();
-    timerService.start(fullAnimationTime).then(timerServiceCallback);
+  it('should pause and resume the timer', async () => {
+    const originalDate = global.Date;
+    const mockDate = new MockDate();
+    global.Date = <any>function() {
+      return mockDate;
+    };
+    (global.Date as any).now = () => mockDate.getTime();
+    
+    const timerServiceCallback = vi.fn();
+    const promise = timerService.start(fullAnimationTime).then(timerServiceCallback);
 
-    tick(longAnimationTime);
+    await vi.advanceTimersByTimeAsync(longAnimationTime);
     mockDate.fastForwardTime(longAnimationTime); // Also update the global Date (in addition to the tick)
 
     timerService.pause();
 
-    tick(shortAnimationTime);
+    await vi.advanceTimersByTimeAsync(shortAnimationTime);
     mockDate.fastForwardTime(shortAnimationTime); // Also update the global Date (in addition to the tick)
 
     expect(timerServiceCallback).not.toHaveBeenCalled();
 
     // Resumes the timer, using the same duration as above (a continue doesn't exist yet)
     timerService.continue();
-    tick(shortAnimationTime);
+    await vi.advanceTimersByTimeAsync(shortAnimationTime);
+    await promise;
 
     expect(timerServiceCallback).toHaveBeenCalled();
-  }));
+    
+    // Restore original Date
+    global.Date = originalDate;
+  });
 
-  it('should stop the timer', fakeAsync(() => {
-    const timerServiceCallback = jest.fn();
+  it('should stop the timer', async () => {
+    const timerServiceCallback = vi.fn();
     timerService.start(fullAnimationTime).then(timerServiceCallback);
 
-    tick(longAnimationTime);
+    await vi.advanceTimersByTimeAsync(longAnimationTime);
     timerService.stop();
-    tick(shortAnimationTime);
+    await vi.advanceTimersByTimeAsync(shortAnimationTime);
 
     expect(timerServiceCallback).not.toHaveBeenCalled();
-  }));
+  });
 });
 
 /**

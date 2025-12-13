@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-
 import { NotifierConfig, NotifierOptions } from './models/notifier-config.model';
 import { NotifierModule } from './notifier.module';
 import { NotifierService } from './services/notifier.service';
+import { describe, expect, it } from 'vitest';
 
 /**
  * Notifier Module - Unit Test

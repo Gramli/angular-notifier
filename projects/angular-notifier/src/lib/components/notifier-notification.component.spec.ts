@@ -1,7 +1,7 @@
 import { Component, DebugElement, Injectable, NO_ERRORS_SCHEMA, TemplateRef, ViewChild } from '@angular/core';
-import { waitForAsync, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
+import { describe, expect, it, vi } from 'vitest';
 import { NotifierAnimationData } from '../models/notifier-animation.model';
 import { NotifierConfig } from '../models/notifier-config.model';
 import { NotifierNotification } from '../models/notifier-notification.model';
@@ -64,7 +64,7 @@ describe('Notifier Notification Component', () => {
       expect(componentFixture.nativeElement.classList.contains(classNameTheme)).toBeTruthy();
     });
 
-    it('should render the custom template if provided by the user', waitForAsync(() => {
+    it('should render the custom template if provided by the user', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         position: {
@@ -103,7 +103,7 @@ describe('Notifier Notification Component', () => {
       expect(componentFixture.debugElement.query(By.css('div.custom-notification-body')).nativeElement.innerHTML).toBe(
         myTestNotification.message,
       );
-    }));
+    });
 
     it('should render on the left', () => {
       // Setup test module
@@ -228,7 +228,7 @@ describe('Notifier Notification Component', () => {
   });
 
   describe('(show)', () => {
-    it('should show', fakeAsync(() => {
+    it('should show', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -244,15 +244,13 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      const showCallback = jest.fn();
-      componentInstance.show().then(showCallback);
-      tick();
+      await componentInstance.show();
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['visibility']).toBe('visible');
-      expect(showCallback).toHaveBeenCalled();
-    }));
+    });
 
-    it('should show (with animations)', fakeAsync(() => {
+    it('should show (with animations)', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -266,24 +264,25 @@ describe('Notifier Notification Component', () => {
       componentFixture.detectChanges();
 
       // Mock away the Web Animations API
-      jest.spyOn(componentFixture.nativeElement, 'animate').mockImplementation(() => {
+      const element = componentFixture.nativeElement as HTMLElement;
+      element.animate = vi.fn();
+      vi.spyOn(element, 'animate').mockImplementation(() => {
         componentFixture.debugElement.styles['opacity'] = '1'; // Fake animation result
+        // Call onfinish asynchronously
+        Promise.resolve().then(() => fakeAnimation.onfinish());
         return fakeAnimation;
       });
 
-      const showCallback = jest.fn();
-      componentInstance.show().then(showCallback);
-      fakeAnimation.onfinish();
-      tick();
+      await componentInstance.show();
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['visibility']).toBe('visible');
       expect(componentFixture.debugElement.styles['opacity']).toBe('1');
-      expect(showCallback).toHaveBeenCalled();
-    }));
+    });
   });
 
   describe('(hide)', () => {
-    it('should hide', fakeAsync(() => {
+    it('should hide', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -299,14 +298,14 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      const hideCallback = jest.fn();
-      componentInstance.hide().then(hideCallback);
-      tick();
+      await componentInstance.hide();
+      componentFixture.detectChanges();
 
-      expect(hideCallback).toHaveBeenCalled();
-    }));
+      // Method completed successfully
+      expect(componentInstance).toBeDefined();
+    });
 
-    it('should hide (with animations)', fakeAsync(() => {
+    it('should hide (with animations)', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -320,23 +319,23 @@ describe('Notifier Notification Component', () => {
       componentFixture.detectChanges();
 
       // Mock away the Web Animations API
-      jest.spyOn(componentFixture.nativeElement, 'animate').mockImplementation(() => {
+      const element = componentFixture.nativeElement as HTMLElement;
+      element.animate = vi.fn();
+      vi.spyOn(element, 'animate').mockImplementation(() => {
         componentFixture.debugElement.styles['opacity'] = '0'; // Fake animation result
+        Promise.resolve().then(() => fakeAnimation.onfinish());
         return fakeAnimation;
       });
 
-      const hideCallback = jest.fn();
-      componentInstance.hide().then(hideCallback);
-      fakeAnimation.onfinish();
-      tick();
+      await componentInstance.hide();
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['opacity']).toBe('0');
-      expect(hideCallback).toHaveBeenCalled();
-    }));
+    });
   });
 
   describe('(shift)', () => {
-    it('should shift to make place on top', fakeAsync(() => {
+    it('should shift to make place on top', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         animations: {
@@ -362,18 +361,16 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      const shiftCallback = jest.fn();
       const shiftDistance = 100;
-      componentInstance.shift(shiftDistance, true).then(shiftCallback);
-      tick();
+      await componentInstance.shift(shiftDistance, true);
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['transform']).toBe(
         `translate3d( 0, ${shiftDistance + testNotifierConfig.position.vertical.gap}px, 0 )`,
       );
-      expect(shiftCallback).toHaveBeenCalled();
-    }));
+    });
 
-    it('should shift to make place on top (with animations)', fakeAsync(() => {
+    it('should shift to make place on top (with animations)', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         behaviour: {
@@ -399,25 +396,25 @@ describe('Notifier Notification Component', () => {
       const shiftDistance = 100;
 
       // Mock away the Web Animations API
-      jest.spyOn(componentFixture.nativeElement, 'animate').mockImplementation(() => {
+      const element = componentFixture.nativeElement as HTMLElement;
+      element.animate = vi.fn();
+      vi.spyOn(element, 'animate').mockImplementation(() => {
         componentFixture.debugElement.styles['transform'] = `translate3d( 0, ${
           shiftDistance + testNotifierConfig.position.vertical.gap
         }px, 0 )`; // Fake animation result
+        Promise.resolve().then(() => fakeAnimation.onfinish());
         return fakeAnimation;
       });
 
-      const shiftCallback = jest.fn();
-      componentInstance.shift(shiftDistance, true).then(shiftCallback);
-      fakeAnimation.onfinish();
-      tick();
+      await componentInstance.shift(shiftDistance, true);
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['transform']).toBe(
         `translate3d( 0, ${shiftDistance + testNotifierConfig.position.vertical.gap}px, 0 )`,
       );
-      expect(shiftCallback).toHaveBeenCalled();
-    }));
+    });
 
-    it('should shift to make place on bottom', fakeAsync(() => {
+    it('should shift to make place on bottom', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         animations: {
@@ -443,18 +440,16 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      const shiftCallback = jest.fn();
       const shiftDistance = 100;
-      componentInstance.shift(shiftDistance, true).then(shiftCallback);
-      tick();
+      await componentInstance.shift(shiftDistance, true);
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['transform']).toBe(
         `translate3d( 0, ${-shiftDistance - testNotifierConfig.position.vertical.gap}px, 0 )`,
       );
-      expect(shiftCallback).toHaveBeenCalled();
-    }));
+    });
 
-    it('should shift to make place on bottom (with animations)', fakeAsync(() => {
+    it('should shift to make place on bottom (with animations)', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         behaviour: {
@@ -479,25 +474,25 @@ describe('Notifier Notification Component', () => {
 
       // Mock away the Web Animations API
       const shiftDistance = 100;
-      jest.spyOn(componentFixture.nativeElement, 'animate').mockImplementation(() => {
+      const element = componentFixture.nativeElement as HTMLElement;
+      element.animate = vi.fn();
+      vi.spyOn(element, 'animate').mockImplementation(() => {
         componentFixture.debugElement.styles['transform'] = `translate3d( 0, ${
           -shiftDistance - testNotifierConfig.position.vertical.gap
         }px, 0 )`; // Fake animation result
+        Promise.resolve().then(() => fakeAnimation.onfinish());
         return fakeAnimation;
       });
 
-      const shiftCallback = jest.fn();
-      componentInstance.shift(shiftDistance, true).then(shiftCallback);
-      fakeAnimation.onfinish();
-      tick();
+      await componentInstance.shift(shiftDistance, true);
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['transform']).toBe(
         `translate3d( 0, ${-shiftDistance - testNotifierConfig.position.vertical.gap}px, 0 )`,
       );
-      expect(shiftCallback).toHaveBeenCalled();
-    }));
+    });
 
-    it('should shift to fill place on top', fakeAsync(() => {
+    it('should shift to fill place on top', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         animations: {
@@ -523,18 +518,16 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      const shiftCallback = jest.fn();
       const shiftDistance = 100;
-      componentInstance.shift(shiftDistance, false).then(shiftCallback);
-      tick();
+      await componentInstance.shift(shiftDistance, false);
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['transform']).toBe(
         `translate3d( 0, ${-shiftDistance - testNotifierConfig.position.vertical.gap}px, 0 )`,
       );
-      expect(shiftCallback).toHaveBeenCalled();
-    }));
+    });
 
-    it('should shift to fill place on top (with animations)', fakeAsync(() => {
+    it('should shift to fill place on top (with animations)', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         behaviour: {
@@ -559,25 +552,25 @@ describe('Notifier Notification Component', () => {
 
       // Mock away the Web Animations API
       const shiftDistance = 100;
-      jest.spyOn(componentFixture.nativeElement, 'animate').mockImplementation(() => {
+      const element = componentFixture.nativeElement as HTMLElement;
+      element.animate = vi.fn();
+      vi.spyOn(element, 'animate').mockImplementation(() => {
         componentFixture.debugElement.styles['transform'] = `translate3d( 0, ${
           -shiftDistance - testNotifierConfig.position.vertical.gap
         }px, 0 )`; // Fake animation result
+        Promise.resolve().then(() => fakeAnimation.onfinish());
         return fakeAnimation;
       });
 
-      const shiftCallback = jest.fn();
-      componentInstance.shift(shiftDistance, false).then(shiftCallback);
-      fakeAnimation.onfinish();
-      tick();
+      await componentInstance.shift(shiftDistance, false);
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['transform']).toBe(
         `translate3d( 0, ${0 - shiftDistance - testNotifierConfig.position.vertical.gap}px, 0 )`,
       );
-      expect(shiftCallback).toHaveBeenCalled();
-    }));
+    });
 
-    it('should shift to fill place on bottom', fakeAsync(() => {
+    it('should shift to fill place on bottom', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         animations: {
@@ -603,18 +596,16 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      const shiftCallback = jest.fn();
       const shiftDistance = 100;
-      componentInstance.shift(shiftDistance, false).then(shiftCallback);
-      tick();
+      await componentInstance.shift(shiftDistance, false);
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['transform']).toBe(
         `translate3d( 0, ${shiftDistance + testNotifierConfig.position.vertical.gap}px, 0 )`,
       );
-      expect(shiftCallback).toHaveBeenCalled();
-    }));
+    });
 
-    it('should shift to fill place on bottom (with animations)', fakeAsync(() => {
+    it('should shift to fill place on bottom (with animations)', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         behaviour: {
@@ -639,25 +630,25 @@ describe('Notifier Notification Component', () => {
 
       // Mock away the Web Animations API
       const shiftDistance = 100;
-      jest.spyOn(componentFixture.nativeElement, 'animate').mockImplementation(() => {
+      const element = componentFixture.nativeElement as HTMLElement;
+      element.animate = vi.fn();
+      vi.spyOn(element, 'animate').mockImplementation(() => {
         componentFixture.debugElement.styles['transform'] = `translate3d( 0, ${
           shiftDistance + testNotifierConfig.position.vertical.gap
         }px, 0 )`; // Fake animation result
+        Promise.resolve().then(() => fakeAnimation.onfinish());
         return fakeAnimation;
       });
 
-      const shiftCallback = jest.fn();
-      componentInstance.shift(shiftDistance, false).then(shiftCallback);
-      fakeAnimation.onfinish();
-      tick();
+      await componentInstance.shift(shiftDistance, false);
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['transform']).toBe(
         `translate3d( 0, ${shiftDistance + testNotifierConfig.position.vertical.gap}px, 0 )`,
       );
-      expect(shiftCallback).toHaveBeenCalled();
-    }));
+    });
 
-    it('should shift to make place in the middle', fakeAsync(() => {
+    it('should shift to make place in the middle', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         animations: {
@@ -683,18 +674,16 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      const shiftCallback = jest.fn();
       const shiftDistance = 100;
-      componentInstance.shift(shiftDistance, true).then(shiftCallback);
-      tick();
+      await componentInstance.shift(shiftDistance, true);
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['transform']).toBe(
         `translate3d( -50%, ${shiftDistance + testNotifierConfig.position.vertical.gap}px, 0 )`,
       );
-      expect(shiftCallback).toHaveBeenCalled();
-    }));
+    });
 
-    it('should shift to make place in the middle (with animations)', fakeAsync(() => {
+    it('should shift to make place in the middle (with animations)', async () => {
       // Setup test module
       const testNotifierConfig: NotifierConfig = new NotifierConfig({
         animations: {
@@ -722,27 +711,27 @@ describe('Notifier Notification Component', () => {
 
       // Mock away the Web Animations API
       const shiftDistance = 100;
-      jest.spyOn(componentFixture.nativeElement, 'animate').mockImplementation(() => {
+      const element = componentFixture.nativeElement as HTMLElement;
+      element.animate = vi.fn();
+      vi.spyOn(element, 'animate').mockImplementation(() => {
         componentFixture.debugElement.styles['transform'] = `translate3d( -50%, ${
           shiftDistance + testNotifierConfig.position.vertical.gap
         }px, 0 )`; // Fake animation result
+        Promise.resolve().then(() => fakeAnimation.onfinish());
         return fakeAnimation;
       });
 
-      const shiftCallback = jest.fn();
-      componentInstance.shift(shiftDistance, true).then(shiftCallback);
-      fakeAnimation.onfinish();
-      tick();
+      await componentInstance.shift(shiftDistance, true);
+      componentFixture.detectChanges();
 
       expect(componentFixture.debugElement.styles['transform']).toBe(
         `translate3d( -50%, ${shiftDistance + testNotifierConfig.position.vertical.gap}px, 0 )`,
       );
-      expect(shiftCallback).toHaveBeenCalled();
-    }));
+    });
   });
 
   describe('(behaviour)', () => {
-    it('should hide automatically after timeout', fakeAsync(() => {
+    it('should hide automatically after timeout', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -758,17 +747,17 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      componentInstance.show();
-      jest.spyOn(componentInstance, 'onClickDismiss');
-      tick();
+      await componentInstance.show();
+      vi.spyOn(componentInstance, 'onClickDismiss');
 
+      // Manually trigger timer completion
       timerService.finishManually();
-      tick();
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       expect(componentInstance.onClickDismiss).toHaveBeenCalled();
-    }));
+    });
 
-    it('should hide after clicking the dismiss button', fakeAsync(() => {
+    it('should hide after clicking the dismiss button', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -785,17 +774,17 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      componentInstance.show();
-      jest.spyOn(componentInstance, 'onClickDismiss');
+      await componentInstance.show();
+      vi.spyOn(componentInstance, 'onClickDismiss');
 
       const dismissButtonElement: DebugElement = componentFixture.debugElement.query(By.css('.notifier__notification-button'));
       dismissButtonElement.nativeElement.click(); // Emulate click event
       componentFixture.detectChanges();
 
       expect(componentInstance.onClickDismiss).toHaveBeenCalled();
-    }));
+    });
 
-    it('should hide after clicking on the notification', fakeAsync(() => {
+    it('should hide after clicking on the notification', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -812,16 +801,16 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      componentInstance.show();
-      jest.spyOn(componentInstance, 'onClickDismiss');
+      await componentInstance.show();
+      vi.spyOn(componentInstance, 'onClickDismiss');
 
       componentFixture.nativeElement.click(); // Emulate click event
       componentFixture.detectChanges();
 
       expect(componentInstance.onClickDismiss).toHaveBeenCalled();
-    }));
+    });
 
-    it('should not hide after clicking on the notification', fakeAsync(() => {
+    it('should not hide after clicking on the notification', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -838,16 +827,16 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      componentInstance.show();
-      jest.spyOn(componentInstance, 'onClickDismiss');
+      await componentInstance.show();
+      vi.spyOn(componentInstance, 'onClickDismiss');
 
       componentFixture.nativeElement.click(); // Emulate click event
       componentFixture.detectChanges();
 
       expect(componentInstance.onClickDismiss).not.toHaveBeenCalled();
-    }));
+    });
 
-    it('should pause the autoHide timer on mouseover, and resume again on mouseout', fakeAsync(() => {
+    it('should pause the autoHide timer on mouseover, and resume again on mouseout', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -864,10 +853,10 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      componentInstance.show();
-      jest.spyOn(componentInstance, 'onClickDismiss');
-      jest.spyOn(timerService, 'pause');
-      jest.spyOn(timerService, 'continue');
+      await componentInstance.show();
+      vi.spyOn(componentInstance, 'onClickDismiss');
+      vi.spyOn(timerService, 'pause');
+      vi.spyOn(timerService, 'continue');
 
       componentInstance.onNotificationMouseover();
 
@@ -878,12 +867,12 @@ describe('Notifier Notification Component', () => {
       expect(timerService.continue).toHaveBeenCalled();
 
       timerService.finishManually();
-      tick();
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       expect(componentInstance.onClickDismiss).toHaveBeenCalled();
-    }));
+    });
 
-    it('should restart the autoHide timer on mouseover', fakeAsync(() => {
+    it('should restart the autoHide timer on mouseover', async () => {
       // Setup test module
       beforeEachWithConfig(
         new NotifierConfig({
@@ -900,10 +889,10 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = testNotification;
       componentFixture.detectChanges();
 
-      componentInstance.show();
-      jest.spyOn(componentInstance, 'onClickDismiss');
-      jest.spyOn(timerService, 'stop');
-      jest.spyOn(timerService, 'start');
+      await componentInstance.show();
+      vi.spyOn(componentInstance, 'onClickDismiss');
+      vi.spyOn(timerService, 'stop');
+      vi.spyOn(timerService, 'start');
 
       componentInstance.onNotificationMouseover();
 
@@ -914,10 +903,10 @@ describe('Notifier Notification Component', () => {
       expect(timerService.start).toHaveBeenCalled();
 
       timerService.finishManually();
-      tick();
+      await new Promise(resolve => setTimeout(resolve, 0));
 
       expect(componentInstance.onClickDismiss).toHaveBeenCalled();
-    }));
+    });
   });
 
   /**

@@ -4,6 +4,6 @@
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "outDir": "./out-tsc/spec",
-    "types": ["jest", "node"]
+    "types": ["vitest/globals"]
   }
 }

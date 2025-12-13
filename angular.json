@@ -20,13 +20,16 @@
           "configurations": {
             "production": {
               "tsConfig": "projects/angular-notifier/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/my-lib/tsconfig.lib.json"
             }
           }
         },
         "test": {
-          "builder": "@angular-builders/jest:run",
+          "builder": "@analogjs/vitest-angular:test",
           "options": {
-            "configPath": "jest.config.json"
+            "tsConfig": "projects/angular-notifier/tsconfig.spec.json"
           }
         }
       }
