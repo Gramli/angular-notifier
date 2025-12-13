@@ -106,14 +106,19 @@ Import the styles in your global styles file (`styles.scss` or `styles.css`):
 
 ```scss
 // Import all styles (core + all themes + all types)
-@import 'gramli-angular-notifier/styles';
+@use 'gramli-angular-notifier/styles';
 
-// Or import only what you need
-@import 'gramli-angular-notifier/styles/core';
-@import 'gramli-angular-notifier/styles/themes/theme-material';
-@import 'gramli-angular-notifier/styles/types/type-success';
-@import 'gramli-angular-notifier/styles/types/type-error';
+// Or import only what you need for better performance
+@use 'gramli-angular-notifier/styles/core';
+@use 'gramli-angular-notifier/styles/themes/theme-material';
+@use 'gramli-angular-notifier/styles/types/type-success';
+@use 'gramli-angular-notifier/styles/types/type-error';
+
+// Or use a complete theme bundle (recommended)
+@use 'gramli-angular-notifier/styles/themes/theme-material-complete';
 ```
+
+> **Note**: The deprecated `@import` syntax still works but will show Sass deprecation warnings. We recommend using `@use` to avoid warnings in your build output.
 
 ### 4. Use the NotifierService
 
@@ -491,7 +496,7 @@ async showProgress() {
 Ensure you've imported the styles in your `styles.scss`:
 
 ```scss
-@import 'gramli-angular-notifier/styles';
+@use 'gramli-angular-notifier/styles';
 ```
 
 ### Notifications not showing
