@@ -94,11 +94,11 @@ $notifier-bootstrap-focus-ring: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !default;
 // These follow Bootstrap's alert color scheme
 
 .notifier__notification--bootstrap {
-  // Default/Primary variant
+  // Default/Primary variant (Bootstrap primary blue)
   &.notifier__notification--default {
-    background-color: #d1ecf1;
-    border-color: #bee5eb;
-    color: #0c5460;
+    background-color: #cfe2ff;
+    border-color: #b6d4fe;
+    color: #084298;
   }
 
   // Info variant (Bootstrap info color)

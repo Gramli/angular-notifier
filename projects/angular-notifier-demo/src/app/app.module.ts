@@ -19,7 +19,7 @@ const customNotifierOptions: NotifierOptions = {
       gap: 10,
     },
   },
-  theme: 'primeng',
+  theme: 'bootstrap',
   behaviour: {
     autoHide: false,
     onClick: false,

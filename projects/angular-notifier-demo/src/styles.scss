@@ -1,4 +1,4 @@
-@import '../../angular-notifier/src/styles';
+@use '../../angular-notifier/src/styles';
 
 /* BASIC */
 
@@ -24,7 +24,6 @@ body {
 
 .app {
   display: block;
-  padding: 30px;
 }
 
 /* HEADINGS */
