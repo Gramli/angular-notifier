@@ -63,7 +63,7 @@
     "@typescript-eslint/parser": "8.49.x",
     "codecov": "^3.6.2",
     "copyfiles": "2.4.x",
-    "eslint": "9.39.x",
+    "eslint": "^9.0.0",
     "eslint-config-prettier": "10.1.x",
     "eslint-plugin-import": "2.32.x",
     "eslint-plugin-prettier": "5.5.x",
