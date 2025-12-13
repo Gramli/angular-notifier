@@ -27,9 +27,10 @@
           }
         },
         "test": {
-          "builder": "@analogjs/vitest-angular:test",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/angular-notifier/tsconfig.spec.json"
+            "tsConfig": "projects/angular-notifier/tsconfig.spec.json",
+            "watch": false
           }
         }
       }
