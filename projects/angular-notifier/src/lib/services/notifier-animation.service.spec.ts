@@ -1,5 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { describe, beforeEach, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import { NotifierAnimationData } from '../models/notifier-animation.model';
 import { NotifierConfig } from '../models/notifier-config.model';
 import { NotifierAnimationService } from './notifier-animation.service';

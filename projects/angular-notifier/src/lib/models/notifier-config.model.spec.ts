@@ -1,5 +1,6 @@
+import { describe, expect, it } from 'vitest';
+
 import { NotifierConfig } from './notifier-config.model';
-import { describe, expect, it, vi } from 'vitest';
 
 /**
  * Notifier Configuration - Unit Test

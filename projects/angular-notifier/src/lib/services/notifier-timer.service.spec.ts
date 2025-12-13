@@ -1,5 +1,6 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { describe, beforeEach, afterEach, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { NotifierTimerService } from './notifier-timer.service';
 
 /**
@@ -11,7 +12,6 @@ describe('Notifier Timer Service', () => {
   const shortAnimationTime = 1000;
 
   let timerService: NotifierTimerService;
-  let mockDate: MockDate;
 
   // Setup test module
   beforeEach(() => {
@@ -30,7 +30,6 @@ describe('Notifier Timer Service', () => {
   // Inject dependencies
   beforeEach(inject([NotifierTimerService], (notifierTimerService: NotifierTimerService) => {
     timerService = notifierTimerService;
-    mockDate = new MockDate();
   }));
 
   it('should instantiate', () => {
@@ -54,11 +53,11 @@ describe('Notifier Timer Service', () => {
   it('should pause and resume the timer', async () => {
     const originalDate = global.Date;
     const mockDate = new MockDate();
-    global.Date = <any>function() {
+    global.Date = <any>function () {
       return mockDate;
     };
     (global.Date as any).now = () => mockDate.getTime();
-    
+
     const timerServiceCallback = vi.fn();
     const promise = timerService.start(fullAnimationTime).then(timerServiceCallback);
 
@@ -78,7 +77,7 @@ describe('Notifier Timer Service', () => {
     await promise;
 
     expect(timerServiceCallback).toHaveBeenCalled();
-    
+
     // Restore original Date
     global.Date = originalDate;
   });

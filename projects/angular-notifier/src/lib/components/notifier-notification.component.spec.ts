@@ -1,7 +1,8 @@
 import { Component, DebugElement, Injectable, NO_ERRORS_SCHEMA, TemplateRef, ViewChild } from '@angular/core';
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { NotifierAnimationData } from '../models/notifier-animation.model';
 import { NotifierConfig } from '../models/notifier-config.model';
 import { NotifierNotification } from '../models/notifier-notification.model';
@@ -15,6 +16,10 @@ import { NotifierNotificationComponent } from './notifier-notification.component
  * Notifier Notification Component - Unit Test
  */
 describe('Notifier Notification Component', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
   const fakeAnimation: any = {
     onfinish: () => null, // We only need this property to be actually mocked away
   };
@@ -98,7 +103,7 @@ describe('Notifier Notification Component', () => {
       componentInstance.notification = myTestNotification;
       componentFixture.detectChanges();
 
-      // // assert
+      //assert
       expect(componentFixture.debugElement.query(By.css('div.custom-notification-body'))).not.toBeNull();
       expect(componentFixture.debugElement.query(By.css('div.custom-notification-body')).nativeElement.innerHTML).toBe(
         myTestNotification.message,
@@ -752,7 +757,7 @@ describe('Notifier Notification Component', () => {
 
       // Manually trigger timer completion
       timerService.finishManually();
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await vi.advanceTimersByTimeAsync(0);
 
       expect(componentInstance.onClickDismiss).toHaveBeenCalled();
     });
@@ -867,7 +872,7 @@ describe('Notifier Notification Component', () => {
       expect(timerService.continue).toHaveBeenCalled();
 
       timerService.finishManually();
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await vi.advanceTimersByTimeAsync(0);
 
       expect(componentInstance.onClickDismiss).toHaveBeenCalled();
     });
@@ -903,7 +908,7 @@ describe('Notifier Notification Component', () => {
       expect(timerService.start).toHaveBeenCalled();
 
       timerService.finishManually();
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await vi.advanceTimersByTimeAsync(0);
 
       expect(componentInstance.onClickDismiss).toHaveBeenCalled();
     });

@@ -1,7 +1,8 @@
 import { DebugElement, Injectable, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { NotifierAction } from '../models/notifier-action.model';
 import { NotifierConfig } from '../models/notifier-config.model';
 import { NotifierConfigToken } from '../notifier.tokens';
@@ -882,7 +883,9 @@ describe('Notifier Container Component', () => {
       componentFixture.detectChanges();
 
       const numberOfNotifications = 2;
-      await vi.advanceTimersByTimeAsync(testNotifierConfig.animations.hide.speed + numberOfNotifications * <number>testNotifierConfig.animations.hide.offset);
+      await vi.advanceTimersByTimeAsync(
+        testNotifierConfig.animations.hide.speed + numberOfNotifications * <number>testNotifierConfig.animations.hide.offset,
+      );
       componentFixture.detectChanges(); // Run a second change detection (to update the template)
 
       const listElements: Array<DebugElement> = componentFixture.debugElement.queryAll(By.css('.notifier__container-list-item'));

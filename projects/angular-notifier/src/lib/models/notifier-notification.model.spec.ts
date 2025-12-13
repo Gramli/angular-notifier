@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+
 import { NotifierNotification } from './notifier-notification.model';
 
 /**
@@ -59,4 +60,3 @@ class MockDate extends Date {
     return mockCurrentTime;
   }
 }
-
