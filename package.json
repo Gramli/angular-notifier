@@ -1,7 +1,7 @@
 {
   "name": "gramli-angular-notifier",
   "description": "A well designed, fully animated, highly customizable, and easy-to-use notification library for your Angular application.",
-  "version": "18.0.0",
+  "version": "21.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -9,16 +9,26 @@
   },
   "keywords": [
     "angular",
-    "angular2",
-    "ng",
-    "ng2",
-    "notifier",
+    "angular17",
+    "angular18",
+    "angular19",
+    "angular20",
+    "angular21",
     "notification",
     "notifications",
+    "notifier",
     "toast",
-    "toasts",
+    "toaster",
+    "snackbar",
     "alert",
-    "library"
+    "alerts",
+    "message",
+    "popup",
+    "angular-component",
+    "angular-library",
+    "typescript",
+    "animated",
+    "customizable"
   ],
   "scripts": {
     "build:demo": "ng build angular-notifier-demo --configuration production",

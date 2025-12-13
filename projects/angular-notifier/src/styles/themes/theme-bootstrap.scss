@@ -1,0 +1,152 @@
+// NOTIFIER: BOOTSTRAP THEME
+//
+// This Bootstrap theme follows Bootstrap 5 design principles and conventions.
+// It incorporates Bootstrap's spacing system, border-radius, shadows, and interaction patterns.
+// Design principles inspired by: <https://getbootstrap.com/>
+//
+// Bootstrap Design Characteristics:
+// - Clean and professional appearance
+// - Subtle shadows (box-shadow utilities)
+// - Standard border-radius (0.375rem)
+// - Consistent spacing using rem units
+// - Focus states with outline for accessibility
+// - Smooth transitions
+
+// Bootstrap-inspired variables
+$notifier-bootstrap-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !default;
+$notifier-bootstrap-shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !default;
+$notifier-bootstrap-border-radius: 0.375rem !default;
+$notifier-bootstrap-border-radius-sm: 0.25rem !default;
+$notifier-bootstrap-spacing-x: 1rem !default;
+$notifier-bootstrap-spacing-y: 0.75rem !default;
+$notifier-bootstrap-transition: all 0.15s ease-in-out !default;
+$notifier-bootstrap-focus-ring: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !default;
+
+.notifier__notification--bootstrap {
+  border-radius: $notifier-bootstrap-border-radius;
+  box-shadow: $notifier-bootstrap-shadow-lg;
+  cursor: default;
+  padding: $notifier-bootstrap-spacing-y $notifier-bootstrap-spacing-x;
+  border: 1px solid transparent;
+  transition: $notifier-bootstrap-transition;
+
+  // Hover effect - slightly elevate the notification
+  &:hover {
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .notifier__notification {
+    &-message {
+      display: inline-block;
+      margin: 0; // Reset paragraph default styles
+      vertical-align: middle;
+      line-height: 1.5; // Bootstrap's default line-height
+      font-size: 1rem; // Bootstrap's base font-size
+      font-weight: 400; // Bootstrap's normal font-weight
+      color: inherit;
+    }
+
+    &-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: $notifier-bootstrap-transition;
+      opacity: 1;
+      margin-left: 0.75rem;
+      margin-right: -0.5rem;
+      outline: none;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0.5rem;
+      width: 2rem;
+      height: 2rem;
+      vertical-align: middle;
+      border-radius: $notifier-bootstrap-border-radius-sm;
+      color: #000;
+      filter: brightness(0.7);
+
+      // Bootstrap-style hover effect
+      &:hover {
+        filter: brightness(0);
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+
+      // Bootstrap-style focus state (accessibility)
+      &:focus {
+        filter: brightness(0);
+        box-shadow: $notifier-bootstrap-focus-ring;
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+
+      // Bootstrap-style active state
+      &:active {
+        transform: scale(0.95);
+        filter: brightness(0);
+        background-color: rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+}
+
+// Bootstrap contextual color variants
+// These follow Bootstrap's alert color scheme
+
+.notifier__notification--bootstrap {
+  // Default/Primary variant
+  &.notifier__notification--default {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+  }
+
+  // Info variant (Bootstrap info color)
+  &.notifier__notification--info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+  }
+
+  // Success variant (Bootstrap success color)
+  &.notifier__notification--success {
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+    color: #0f5132;
+  }
+
+  // Warning variant (Bootstrap warning color)
+  &.notifier__notification--warning {
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+    color: #664d03;
+  }
+
+  // Error/Danger variant (Bootstrap danger color)
+  &.notifier__notification--error {
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+    color: #842029;
+  }
+}
+
+// Responsive adjustments (Bootstrap breakpoints inspired)
+@media (max-width: 576px) {
+  .notifier__notification--bootstrap {
+    padding: 0.5rem 0.75rem;
+    border-radius: $notifier-bootstrap-border-radius-sm;
+
+    .notifier__notification {
+      &-message {
+        font-size: 0.875rem; // Slightly smaller on mobile
+        line-height: 1.4;
+      }
+
+      &-button {
+        width: 1.75rem;
+        height: 1.75rem;
+        padding: 0.375rem;
+      }
+    }
+  }
+}

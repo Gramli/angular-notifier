@@ -1,508 +1,519 @@
-## Forked from https://github.com/dominique-mueller/angular-notifier to update for actual Angular versions.
-
 <div align="center">
 
-# angular-notifier
+# Angular Notifier
 
-[![Build&Test](https://github.com/Gramli/angular-notifier/actions/workflows/ci.yml/badge.svg)](https://github.com/Gramli/angular-notifier/actions/workflows/ci.yml)
+**A fully animated, highly customizable, and easy-to-use notification library for Angular applications**
+
+[![Build & Test](https://img.shields.io/github/actions/workflow/status/Gramli/angular-notifier/ci.yml?style=flat-square&label=Build)](https://github.com/Gramli/angular-notifier/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/gramli-angular-notifier?style=flat-square&logo=npm)](https://www.npmjs.com/package/gramli-angular-notifier)
+[![Angular](https://img.shields.io/badge/Angular-21.x-dd0031?style=flat-square&logo=angular)](https://angular.io)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
+
+[Features](#features) • [Installation](#installation) • [Quick Start](#quick-start) • [Themes](#themes) • [API](#api) • [Customization](#customization)
+
+![Angular Notifier Animated Preview](/docs/angular-notifier-preview.gif)
 
 </div>
 
-## Demo
+## Overview
 
-You can play around with this library with **[this Stackblitz right here](https://stackblitz.com/edit/angular-notifier-demo)**.
+Angular Notifier is a notification library designed to provide elegant, non-intrusive notifications for your Angular applications. With built-in animations, multiple themes, and extensive customization options, it helps you deliver a polished user experience without the complexity.
 
-![Angular Notifier Animated Preview GIF](/docs/angular-notifier-preview.gif?raw=true)
+**Key highlights:**
 
-<br><br><br>
+- **Highly customizable** - Configure positioning, behavior, animations, and appearance
+- **Fully animated** - Smooth slide and fade animations with customizable timing
+- **Multiple themes** - Material Design, Bootstrap, and PrimeNG-inspired styles out of the box
+- **Type-safe** - Written in TypeScript with full type definitions
+- **Lightweight** - Zero dependencies beyond Angular itself
+- **Production-ready** - Battle-tested and actively maintained
 
-## How to install
+## Features
 
-You can get **angular-notifier** via **npm** by either adding it as a new _dependency_ to your `package.json` file and running npm install,
-or running the following command:
+- **Rich notification types**: Success, error, warning, info, and custom types
+- **Flexible positioning**: Top, bottom, left, right, or center placement
+- **Smart behavior**: Auto-hide, stacking, pause on hover, and click handlers
+- **Animation presets**: Built-in fade and slide animations with customizable easing
+- **Multiple themes**: Material Design, Bootstrap-style, and PrimeNG-inspired themes
+- **Responsive design**: Mobile-optimized with responsive breakpoints
+- **Custom templates**: Use your own HTML templates for complete control
+- **Notification control**: Show, hide, and manage notifications programmatically
+- **Accessibility**: Keyboard navigation and ARIA support
+
+## Installation
+
+Install via npm:
 
 ```bash
 npm install gramli-angular-notifier
 ```
 
-<br>
+### Angular Version Compatibility
 
-### Angular versions
+| Angular Notifier | Angular |
+| ---------------- | ------- |
+| `21.x`           | `21.x`  |
+| `18.x`           | `20.x`  |
+| `17.x`           | `19.x`  |
+| `16.x`           | `18.x`  |
+| `15.x`           | `17.x`  |
 
-The following list describes the compatibility with Angular:
+> **Note**: This is a maintained fork of [dominique-mueller/angular-notifier](https://github.com/dominique-mueller/angular-notifier), updated to support the latest Angular versions. For older Angular versions, see the [original repository](https://github.com/dominique-mueller/angular-notifier).
 
-| Angular Notifier | Angular | Compilation        |
-| ---------------- | ------- | ------------------ |
-| `15.x`           | `17.x`  | Ivy (partial mode) |
-| `16.x`           | `18.x`  | Ivy (partial mode) |
-| `17.x`           | `19.x`  | Ivy (partial mode) |
-| `18.x`           | `20.x`  | Ivy (partial mode) |
+## Quick Start
 
-For older versions visit:
-https://github.com/dominique-mueller/angular-notifier
+### 1. Import the NotifierModule
 
-<br><br><br>
-
-## How to setup
-
-Before actually being able to use the **angular-notifier** library within our code, we have to first set it up within Angular, and also
-bring the styles into our project.
-
-<br>
-
-### 1. Import the `NotifierModule`
-
-First of all, make **angular-notifier** globally available to your Angular application by importing (and optionally also configuring) the
-`NotifierModule` the your root Angular module. For example:
-
-```typescript
-import { NotifierModule } from 'gramli-angular-notifier';
-
-@NgModule({
-  imports: [NotifierModule],
-})
-export class AppModule {}
-```
-
-But wait -- your probably might want to customize your notifications' look and behaviour according to your requirements and needs. To do so,
-call the `withConfig` method on the `NotifierModule`, and pass in the options. For example:
+Add the `NotifierModule` to your root module:
 
 ```typescript
 import { NotifierModule } from 'gramli-angular-notifier';
 
 @NgModule({
   imports: [
+    NotifierModule,
+    // Or with custom configuration
     NotifierModule.withConfig({
-      // Custom options in here
-    }),
-  ],
+      position: {
+        horizontal: { position: 'right', distance: 12 },
+        vertical: { position: 'top', distance: 12, gap: 10 }
+      },
+      theme: 'material'
+    })
+  ]
 })
-export class AppModule {}
+export class AppModule { }
 ```
 
-<br>
+### 2. Add the notifier container
 
-### 2. Use the `notifier-container` component
-
-In addition, you have to place the `notifier-container` component somewhere in your application, best at the last element of your
-root (app) component. For example:
+Add the `<notifier-container>` component to your app component template:
 
 ```typescript
 @Component({
-  selector: 'my-app',
+  selector: 'app-root',
   template: `
-    <h1>Hello World</h1>
+    <router-outlet></router-outlet>
     <notifier-container></notifier-container>
-  `,
+  `
 })
-export class AppComponent {}
+export class AppComponent { }
 ```
 
-> Later on, this component will contain and manage all your applications' notifications.
+### 3. Import styles
 
-<br>
+Import the styles in your global styles file (`styles.scss` or `styles.css`):
 
-### 3. Import the styles
+```scss
+// Import all styles (core + all themes + all types)
+@import 'gramli-angular-notifier/styles';
 
-Of course we also need to import the **angular-notifier** styles into our application. Depending on the architecture of your Angular
-application, you want to either import the original SASS files, or the already compiled CSS files instead - or none of them if you wish to
-write your own styles from scratch.
+// Or import only what you need
+@import 'gramli-angular-notifier/styles/core';
+@import 'gramli-angular-notifier/styles/themes/theme-material';
+@import 'gramli-angular-notifier/styles/types/type-success';
+@import 'gramli-angular-notifier/styles/types/type-error';
+```
 
-#### The easy way: Import all the styles
+### 4. Use the NotifierService
 
-To import all the styles, simple include either the `~/gramli-angular-notifier/styles.(scss|css)` file. It contains the core styles as well as all
-the themes and notification types.
-
-#### The advanced way: Only import the styles actually needed
-
-To keep the size if your styles as small as possible (improving performance for the perfect UX), your might instead decide to only import
-the styles actually needed by our application. The **angular-notifier** styles are modular:
-
-- The `~/gramli-angular-notifier/styles/core.(scss|css)` file is always required, it defines the basic styles (such as the layout)
-- Themes can be imported from the `~/gramli-angular-notifier/styles/theme` folder
-- The different notification types, then, can be imported from the `~/gramli-angular-notifier/styles/types` folder
-
-<br><br><br>
-
-## How to use
-
-Using **angular-notifier** is as simple as it can get -- simple import and inject the `NotifierService` into every component (directive,
-service, ...) you want to use in. For example:
+Inject and use the `NotifierService` in your components:
 
 ```typescript
 import { NotifierService } from 'gramli-angular-notifier';
 
 @Component({
-  // ...
+  selector: 'app-example',
+  template: `<button (click)="showNotification()">Show Notification</button>`
 })
-export class MyAwesomeComponent {
-  private readonly notifier: NotifierService;
+export class ExampleComponent {
+  constructor(private notifier: NotifierService) { }
 
-  constructor(notifierService: NotifierService) {
-    this.notifier = notifierService;
+  showNotification() {
+    this.notifier.notify('success', 'You are awesome!');
   }
 }
 ```
 
-<br>
+## Themes
 
-### Show notifications
+Angular Notifier comes with three professionally designed themes:
 
-Showing a notification is simple - all your need is a type, and a message to be displayed. For example:
+### Material Design Theme
 
-```typescript
-this.notifier.notify('success', 'You are awesome! I mean it!');
-```
-
-You can further pass in a _notification ID_ as the third (optional) argument. Essentially, such a _notification ID_ is nothing more but a
-unique string tha can be used later on to gain access (and thus control) to this specific notification. For example:
+Clean, modern design following Google's Material Design principles:
 
 ```typescript
-this.notifier.notify('success', 'You are awesome! I mean it!', 'THAT_NOTIFICATION_ID');
+NotifierModule.withConfig({ theme: 'material' })
 ```
 
-> For example, you might want to define a _notification ID_ if you know that, at some point in the future, you will need to remove _this
-> exact_ notification.
+- Subtle shadows and 3px border radius
+- Smooth opacity transitions
+- Compact and space-efficient
 
-**The syntax above is actually just a shorthand version of the following:**
+### Bootstrap Theme
+
+Professional styling inspired by Bootstrap 5:
+
+```typescript
+NotifierModule.withConfig({ theme: 'bootstrap' })
+```
+
+- Alert-style contextual colors
+- 6px rounded corners with layered shadows
+- Responsive spacing with rem units
+- Enhanced hover effects and accessibility focus states
+
+### PrimeNG Theme
+
+Modern, elegant design inspired by PrimeNG components:
+
+```typescript
+NotifierModule.withConfig({ theme: 'primeng' })
+```
+
+- Rich, vibrant colors with left accent border
+- Multi-layered shadows for depth
+- Circular close button with rotation animation
+- Available in both dark and light variants (`primeng-light`)
+
+## API
+
+### NotifierService Methods
+
+#### `notify(type, message, id?)`
+
+Show a notification with the specified type and message:
+
+```typescript
+this.notifier.notify('success', 'Operation completed successfully!');
+this.notifier.notify('error', 'Something went wrong', 'error-id-123');
+```
+
+#### `show(config)`
+
+Show a notification with detailed configuration:
 
 ```typescript
 this.notifier.show({
-  type: 'success',
-  message: 'You are awesome! I mean it!',
-  id: 'THAT_NOTIFICATION_ID', // Again, this is optional
+  type: 'warning',
+  message: 'Your session will expire soon',
+  id: 'session-warning',
+  template: this.customTemplate
 });
 ```
 
-<br>
+#### `hide(id)`
 
-### Hide notifications
-
-You can also hide notifications. To hide a specific notification - assuming you've defined a _notification ID_ when creating it, simply
-call:
+Hide a specific notification by ID:
 
 ```typescript
-this.notifier.hide('THAT_NOTIFICATION_ID');
+this.notifier.hide('notification-id');
 ```
 
-Furthermore, your can hide the newest notification by calling:
+#### `hideNewest()`
+
+Hide the most recently shown notification:
 
 ```typescript
 this.notifier.hideNewest();
 ```
 
-Or, your could hide the oldest notification:
+#### `hideOldest()`
+
+Hide the oldest visible notification:
 
 ```typescript
 this.notifier.hideOldest();
 ```
 
-And, of course, it's also possible to hide all visible notifications at once:
+#### `hideAll()`
+
+Hide all visible notifications:
 
 ```typescript
 this.notifier.hideAll();
 ```
 
-<br><br><br>
+### Notification Types
 
-## How to customize
+- `default` - Default notification style
+- `info` - Informational messages
+- `success` - Success confirmations
+- `warning` - Warning messages
+- `error` - Error alerts
 
-From the beginning, the **angular-notifier** library has been written with customizability in mind. The idea is that **angular-notifier**
-works the way your want it to, so that you can make it blend perfectly into the rest of your application. Still, the default configuration
-should already provide a great User Experience.
+## Customization
 
-> Keep in mind that **angular-notifier** can be configured only once - which is at the time you import the `NotifierModule` into your root
-> (app) module.
+### Configuration Options
 
-<br>
-
-### Position
-
-With the `position` property you can define where exactly notifications will appear on the screen:
+Configure Angular Notifier when importing the module:
 
 ```typescript
-position: {
-
-  horizontal: {
-
-    /**
-     * Defines the horizontal position on the screen
-     * @type {'left' | 'middle' | 'right'}
-     */
-    position: 'left',
-
-    /**
-     * Defines the horizontal distance to the screen edge (in px)
-     * @type {number}
-     */
-    distance: 12
-
-  },
-
-  vertical: {
-
-    /**
-     * Defines the vertical position on the screen
-     * @type {'top' | 'bottom'}
-     */
-    position: 'bottom',
-
-    /**
-     * Defines the vertical distance to the screen edge (in px)
-     * @type {number}
-     */
-    distance: 12
-
-    /**
-     * Defines the vertical gap, existing between multiple notifications (in px)
-     * @type {number}
-     */
-    gap: 10
-
-  }
-
-}
-```
-
-<br>
-
-### Theme
-
-With the `theme` property you can change the overall look and feel of your notifications:
-
-```typescript
-/**
- * Defines the notification theme, responsible for the Visual Design of notifications
- * @type {string}
- */
-theme: 'material';
-```
-
-#### Theming in detail
-
-Well, how does theming actually work? In the end, the value set for the `theme` property will be part of a class added to each notification
-when being created. For example, using `material` as the theme results in all notifications getting a class assigned named `x-notifier__notification--material`.
-
-> Everyone - yes, I'm looking at you - can use this mechanism to write custom notification themes and apply them via the `theme` property.
-> For example on how to create a theme from scratch, just take a look at the themes coming along with this library (as for now only the
-> `material` theme).
-
-<br>
-
-### Behaviour
-
-With the `behaviour` property you can define how notifications will behave in different situations:
-
-```typescript
-behaviour: {
-
-  /**
-   * Defines whether each notification will hide itself automatically after a timeout passes
-   * @type {number | false}
-   */
-  autoHide: 5000,
-
-  /**
-   * Defines what happens when someone clicks on a notification
-   * @type {'hide' | false}
-   */
-  onClick: false,
-
-  /**
-   * Defines what happens when someone hovers over a notification
-   * @type {'pauseAutoHide' | 'resetAutoHide' | false}
-   */
-  onMouseover: 'pauseAutoHide',
-
-  /**
-   * Defines whether the dismiss button is visible or not
-   * @type {boolean}
-   */
-  showDismissButton: true,
-
-  /**
-   * Defines whether multiple notification will be stacked, and how high the stack limit is
-   * @type {number | false}
-   */
-  stacking: 4
-
-}
-```
-
-<br>
-
-### Custom Templates
-
-If you need more control over how the inner HTML part of the notification looks like, either because your style-guide requires it, or for being able to add icons etc, then you can **define a custom `<ng-template>`** which you pass to the `NotifierService`.
-
-You can define a custom `ng-template` as follows:
-
-```html
-<ng-template #customNotification let-notificationData="notification">
-  <my-custom-alert type="notificationData.type"> {{ notificationData.message }} </my-custom-alert>
-</ng-template>
-```
-
-In this case you could wrap your own HTML, even a `<my-custom-alert>` component which you might use in your application. The notification data is passed in as a `notification` object, which you can reference inside the `<ng-template>` using the `let-` syntax.
-
-Inside your component, you can then reference the `<ng-template>` by its template variable `#customNotification` using Angular's `ViewChild`:
-
-```typescript
-import { ViewChild } from '@angular/core';
-
-@Component({
-  // ...
-})
-export class SomeComponent {
-  @ViewChild('customNotification', { static: true }) customNotificationTmpl;
-
-  constructor(private notifierService: NotifierService) {}
-
-  showNotification() {
-    this.notifier.show({
-      message: 'Hi there!',
-      type: 'info',
-      template: this.customNotificationTmpl,
-    });
-  }
-}
-```
-
-<br>
-
-### Animations
-
-With the `animations` property your can define whether and how exactly notification will be animated:
-
-```typescript
-animations: {
-
-  /**
-   * Defines whether all (!) animations are enabled or disabled
-   * @type {boolean}
-   */
-  enabled: true,
-
-  show: {
-
-    /**
-     * Defines the animation preset that will be used to animate a new notification in
-     * @type {'fade' | 'slide'}
-     */
-    preset: 'slide',
-
-    /**
-     * Defines how long it will take to animate a new notification in (in ms)
-     * @type {number}
-     */
-    speed: 300,
-
-    /**
-     * Defines which easing method will be used when animating a new notification in
-     * @type {'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out'}
-     */
-    easing: 'ease'
-
-  },
-
-  hide: {
-
-    /**
-     * Defines the animation preset that will be used to animate a new notification out
-     * @type {'fade' | 'slide'}
-     */
-    preset: 'fade',
-
-    /**
-     * Defines how long it will take to animate a new notification out (in ms)
-     * @type {number}
-     */
-    speed: 300,
-
-    /**
-     * Defines which easing method will be used when animating a new notification out
-     * @type {'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out'}
-     */
-    easing: 'ease',
-
-    /**
-     * Defines the animation offset used when hiding multiple notifications at once (in ms)
-     * @type {number | false}
-     */
-    offset: 50
-
-  },
-
-  shift: {
-
-    /**
-     * Defines how long it will take to shift a notification around (in ms)
-     * @type {number}
-     */
-    speed: 300,
-
-    /**
-     * Defines which easing method will be used when shifting a notification around
-     * @type {string}
-     */
-    easing: 'ease' // All standard CSS easing methods work
-
-  },
-
-  /**
-   * Defines the overall animation overlap, allowing for much smoother looking animations (in ms)
-   * @type {number | false}
-   */
-  overlap: 150
-
-}
-```
-
-<br>
-
-### In short -- the default configuration
-
-To sum it up, the following is the default configuration _(copy-paste-friendly)_:
-
-```typescript
-const notifierDefaultOptions: NotifierOptions = {
+NotifierModule.withConfig({
   position: {
     horizontal: {
-      position: 'left',
-      distance: 12,
+      position: 'right',  // 'left' | 'middle' | 'right'
+      distance: 12        // Distance from edge (px)
     },
     vertical: {
-      position: 'bottom',
-      distance: 12,
-      gap: 10,
-    },
+      position: 'top',    // 'top' | 'bottom'
+      distance: 12,       // Distance from edge (px)
+      gap: 10            // Gap between notifications (px)
+    }
   },
-  theme: 'material',
+  
+  theme: 'material',    // 'material' | 'bootstrap' | 'primeng' | 'primeng-light'
+  
   behaviour: {
-    autoHide: 5000,
-    onClick: false,
-    onMouseover: 'pauseAutoHide',
-    showDismissButton: true,
-    stacking: 4,
+    autoHide: 5000,                // Auto-hide after ms (false to disable)
+    onClick: 'hide',               // 'hide' | false
+    onMouseover: 'pauseAutoHide',  // 'pauseAutoHide' | 'resetAutoHide' | false
+    showDismissButton: true,       // Show close button
+    stacking: 4                    // Max visible notifications (false for unlimited)
   },
+  
   animations: {
     enabled: true,
     show: {
-      preset: 'slide',
-      speed: 300,
-      easing: 'ease',
+      preset: 'slide',             // 'slide' | 'fade'
+      speed: 300,                  // Animation duration (ms)
+      easing: 'ease'               // CSS easing function
     },
     hide: {
       preset: 'fade',
       speed: 300,
       easing: 'ease',
-      offset: 50,
+      offset: 50                   // Stagger delay when hiding multiple (ms)
     },
     shift: {
-      speed: 300,
-      easing: 'ease',
+      speed: 300,                  // Duration for shifting notifications
+      easing: 'ease'
     },
-    overlap: 150,
-  },
-};
+    overlap: 150                   // Animation overlap for smoother transitions (ms)
+  }
+})
 ```
+
+### Custom Templates
+
+Create fully custom notification layouts using Angular templates:
+
+```typescript
+@Component({
+  selector: 'app-notifications',
+  template: `
+    <ng-template #customNotification let-notificationData="notification">
+      <div class="custom-alert">
+        <span class="icon">{{ getIcon(notificationData.type) }}</span>
+        <span class="message">{{ notificationData.message }}</span>
+      </div>
+    </ng-template>
+  `
+})
+export class NotificationsComponent {
+  @ViewChild('customNotification', { static: true }) customTemplate: TemplateRef<any>;
+
+  constructor(private notifier: NotifierService) { }
+
+  showCustomNotification() {
+    this.notifier.show({
+      type: 'success',
+      message: 'Custom styled notification!',
+      template: this.customTemplate
+    });
+  }
+
+  getIcon(type: string): string {
+    const icons = { success: '✓', error: '✗', warning: '⚠', info: 'ℹ' };
+    return icons[type] || '•';
+  }
+}
+```
+
+### Custom Themes
+
+Create your own notification theme by writing custom SCSS:
+
+```scss
+// my-custom-theme.scss
+.notifier__notification--my-theme {
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
+  &.notifier__notification--success {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+  
+  .notifier__notification-button {
+    opacity: 0.8;
+    &:hover { opacity: 1; }
+  }
+}
+```
+
+Then use it in your configuration:
+
+```typescript
+NotifierModule.withConfig({ theme: 'my-theme' })
+```
+
+## Advanced Usage
+
+### Managing Notification Lifecycle
+
+```typescript
+export class AppComponent {
+  constructor(private notifier: NotifierService) { }
+
+  showTemporary() {
+    // Auto-hide after 3 seconds
+    this.notifier.show({
+      type: 'info',
+      message: 'This will disappear soon',
+      id: 'temp-notification'
+    });
+  }
+
+  showPersistent() {
+    // Stays until manually dismissed
+    this.notifier.show({
+      type: 'warning',
+      message: 'Action required!',
+      id: 'persistent-warning'
+    });
+  }
+
+  hidePersistent() {
+    this.notifier.hide('persistent-warning');
+  }
+
+  clearAll() {
+    this.notifier.hideAll();
+  }
+}
+```
+
+### Notification Stacking
+
+Control how notifications stack:
+
+```typescript
+// Limit to 3 visible notifications
+NotifierModule.withConfig({ behaviour: { stacking: 3 } })
+
+// Unlimited stacking
+NotifierModule.withConfig({ behaviour: { stacking: false } })
+```
+
+### Click and Hover Behaviors
+
+```typescript
+NotifierModule.withConfig({
+  behaviour: {
+    // Hide notification on click
+    onClick: 'hide',
+    
+    // Pause auto-hide timer on hover
+    onMouseover: 'pauseAutoHide',
+    
+    // Or reset the timer on hover
+    // onMouseover: 'resetAutoHide',
+  }
+})
+```
+
+## Examples
+
+### Success notification with custom ID
+
+```typescript
+this.notifier.notify('success', 'Profile updated successfully!', 'profile-update');
+```
+
+### Error notification that stays visible
+
+```typescript
+this.notifier.show({
+  type: 'error',
+  message: 'Failed to connect to server. Please try again.',
+  id: 'connection-error'
+});
+```
+
+### Warning with custom behavior
+
+```typescript
+NotifierModule.withConfig({
+  behaviour: {
+    autoHide: 10000,      // Show for 10 seconds
+    onClick: 'hide',       // Dismiss on click
+    onMouseover: 'pauseAutoHide'  // Pause timer when hovering
+  }
+})
+```
+
+### Sequential notifications
+
+```typescript
+async showProgress() {
+  this.notifier.notify('info', 'Starting process...');
+  
+  await this.performTask();
+  this.notifier.hideAll();
+  this.notifier.notify('success', 'Process completed!');
+}
+```
+
+## Best Practices
+
+> [!TIP]
+> **Position notifications wisely** - Top-right or bottom-right positions are less intrusive for most applications.
+
+> [!TIP]
+> **Use appropriate types** - Match notification types to your message severity to provide clear visual cues.
+
+> [!TIP]
+> **Set reasonable timeouts** - Error messages should have longer auto-hide times (or no auto-hide) compared to success messages.
+
+> [!WARNING]
+> **Avoid notification spam** - Limit stacking to prevent overwhelming users. Consider using `hideAll()` before showing new critical notifications.
+
+> [!NOTE]
+> **Test on mobile** - Notifications should be readable and dismissible on small screens. The built-in themes include responsive breakpoints.
+
+## Troubleshooting
+
+### Styles not appearing
+
+Ensure you've imported the styles in your `styles.scss`:
+
+```scss
+@import 'gramli-angular-notifier/styles';
+```
+
+### Notifications not showing
+
+1. Verify `<notifier-container>` is in your app component template
+2. Check that `NotifierModule` is imported in your root module
+3. Ensure the NotifierService is properly injected
+
+### Animations not working
+
+Check that animations are enabled in your configuration:
+
+```typescript
+NotifierModule.withConfig({ animations: { enabled: true } })
+```
+
+## Credits
+
+This library is a maintained fork of [angular-notifier](https://github.com/dominique-mueller/angular-notifier) by Dominique Müller. Special thanks to the original author for creating this excellent library.
+
+Originally created by [itsdevdom](https://github.com/itsdevdom). Currently maintained by [Gramli](https://github.com/Gramli).
+
+## License
+
+MIT License - see the [LICENSE](LICENSE) file for details.
