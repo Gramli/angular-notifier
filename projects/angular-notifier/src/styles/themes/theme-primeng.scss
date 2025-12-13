@@ -1,0 +1,249 @@
+// NOTIFIER: PRIMENG THEME
+//
+// This PrimeNG theme follows PrimeNG design system principles and conventions.
+// It incorporates PrimeNG's modern design language with soft shadows, rounded corners, and professional styling.
+// Design principles inspired by: <https://primeng.org/>
+//
+// PrimeNG Design Characteristics:
+// - Modern and professional appearance
+// - Soft, layered shadows for depth
+// - Smooth rounded corners
+// - Rich contextual colors
+// - Elegant transitions and interactions
+// - Strong visual hierarchy
+
+// PrimeNG-inspired variables
+$notifier-primeng-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 
+                          0 4px 5px 0 rgba(0, 0, 0, 0.14), 
+                          0 1px 10px 0 rgba(0, 0, 0, 0.12) !default;
+$notifier-primeng-shadow-hover: 0 4px 8px -2px rgba(0, 0, 0, 0.2), 
+                                 0 8px 10px 0 rgba(0, 0, 0, 0.14), 
+                                 0 2px 16px 0 rgba(0, 0, 0, 0.12) !default;
+$notifier-primeng-border-radius: 6px !default;
+$notifier-primeng-spacing-x: 1.25rem !default;
+$notifier-primeng-spacing-y: 1rem !default;
+$notifier-primeng-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !default;
+$notifier-primeng-icon-size: 1.25rem !default;
+
+.notifier__notification--primeng {
+  border-radius: $notifier-primeng-border-radius;
+  box-shadow: $notifier-primeng-shadow;
+  cursor: default;
+  padding: $notifier-primeng-spacing-y $notifier-primeng-spacing-x;
+  border-left: 6px solid;
+  transition: $notifier-primeng-transition;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  // Hover effect - elevate with enhanced shadow
+  &:hover {
+    box-shadow: $notifier-primeng-shadow-hover;
+    transform: translateY(-2px);
+  }
+
+  .notifier__notification {
+    &-message {
+      display: inline-block;
+      margin: 0;
+      vertical-align: middle;
+      line-height: 1.5;
+      font-size: 1rem;
+      font-weight: 400;
+      color: inherit;
+    }
+
+    &-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: $notifier-primeng-transition;
+      margin-left: 1rem;
+      margin-right: -0.5rem;
+      outline: none;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0.5rem;
+      width: 2rem;
+      height: 2rem;
+      vertical-align: middle;
+      border-radius: 50%; // Circular button - PrimeNG style
+      color: currentColor;
+      opacity: 0.7;
+
+      // PrimeNG-style hover effect
+      &:hover {
+        opacity: 1;
+        background-color: rgba(255, 255, 255, 0.3);
+        transform: rotate(90deg); // Subtle rotation on hover
+      }
+
+      // PrimeNG-style focus state (accessibility)
+      &:focus {
+        opacity: 1;
+        box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.5);
+        background-color: rgba(255, 255, 255, 0.3);
+      }
+
+      // PrimeNG-style active state
+      &:active {
+        transform: scale(0.9) rotate(90deg);
+        opacity: 1;
+        background-color: rgba(255, 255, 255, 0.4);
+      }
+    }
+  }
+}
+
+// PrimeNG contextual color variants
+// These follow PrimeNG's semantic color system
+
+.notifier__notification--primeng {
+  // Default/Info variant (PrimeNG info blue)
+  &.notifier__notification--default,
+  &.notifier__notification--info {
+    background-color: #3B82F6;
+    border-left-color: #1D4ED8;
+    color: #ffffff;
+  }
+
+  // Success variant (PrimeNG success green)
+  &.notifier__notification--success {
+    background-color: #22C55E;
+    border-left-color: #16A34A;
+    color: #ffffff;
+  }
+
+  // Warning variant (PrimeNG warning orange)
+  &.notifier__notification--warning {
+    background-color: #F59E0B;
+    border-left-color: #D97706;
+    color: #ffffff;
+  }
+
+  // Error/Danger variant (PrimeNG error red)
+  &.notifier__notification--error {
+    background-color: #EF4444;
+    border-left-color: #DC2626;
+    color: #ffffff;
+  }
+}
+
+// Alternative light variants (similar to PrimeNG Toast messages)
+.notifier__notification--primeng-light {
+  border-radius: $notifier-primeng-border-radius;
+  box-shadow: $notifier-primeng-shadow;
+  cursor: default;
+  padding: $notifier-primeng-spacing-y $notifier-primeng-spacing-x;
+  border: 1px solid;
+  border-left-width: 6px;
+  transition: $notifier-primeng-transition;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  &:hover {
+    box-shadow: $notifier-primeng-shadow-hover;
+    transform: translateY(-2px);
+  }
+
+  .notifier__notification {
+    &-message {
+      display: inline-block;
+      margin: 0;
+      vertical-align: middle;
+      line-height: 1.5;
+      font-size: 1rem;
+      font-weight: 500;
+      color: inherit;
+    }
+
+    &-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: $notifier-primeng-transition;
+      margin-left: 1rem;
+      margin-right: -0.5rem;
+      outline: none;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0.5rem;
+      width: 2rem;
+      height: 2rem;
+      vertical-align: middle;
+      border-radius: 50%;
+      color: currentColor;
+      opacity: 0.7;
+
+      &:hover {
+        opacity: 1;
+        background-color: rgba(0, 0, 0, 0.04);
+        transform: rotate(90deg);
+      }
+
+      &:focus {
+        opacity: 1;
+        box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+
+      &:active {
+        transform: scale(0.9) rotate(90deg);
+        opacity: 1;
+        background-color: rgba(0, 0, 0, 0.08);
+      }
+    }
+  }
+
+  // Light variant colors
+  &.notifier__notification--default,
+  &.notifier__notification--info {
+    background-color: #DBEAFE;
+    border-color: #93C5FD;
+    border-left-color: #3B82F6;
+    color: #1E40AF;
+  }
+
+  &.notifier__notification--success {
+    background-color: #D1FAE5;
+    border-color: #86EFAC;
+    border-left-color: #22C55E;
+    color: #166534;
+  }
+
+  &.notifier__notification--warning {
+    background-color: #FEF3C7;
+    border-color: #FCD34D;
+    border-left-color: #F59E0B;
+    color: #92400E;
+  }
+
+  &.notifier__notification--error {
+    background-color: #FEE2E2;
+    border-color: #FCA5A5;
+    border-left-color: #EF4444;
+    color: #991B1B;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .notifier__notification--primeng,
+  .notifier__notification--primeng-light {
+    padding: 0.875rem 1rem;
+    border-radius: 4px;
+
+    .notifier__notification {
+      &-message {
+        font-size: 0.9375rem;
+        line-height: 1.4;
+      }
+
+      &-button {
+        width: 1.875rem;
+        height: 1.875rem;
+        padding: 0.4375rem;
+        margin-left: 0.75rem;
+      }
+    }
+  }
+}

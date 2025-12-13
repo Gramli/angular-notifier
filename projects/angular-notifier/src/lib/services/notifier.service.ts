@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { NotifierAction } from '../models/notifier-action.model';
@@ -19,23 +19,12 @@ export class NotifierService {
   /**
    * Notifier queue service
    */
-  private readonly queueService: NotifierQueueService;
+  private readonly queueService = inject(NotifierQueueService);
 
   /**
    * Notifier configuration
    */
-  private readonly config: NotifierConfig;
-
-  /**
-   * Constructor
-   *
-   * @param notifierQueueService Notifier queue service
-   * @param config               Notifier configuration, optionally injected as a dependency
-   */
-  public constructor(notifierQueueService: NotifierQueueService, @Inject(NotifierConfigToken) config: NotifierConfig) {
-    this.queueService = notifierQueueService;
-    this.config = config;
-  }
+  private readonly config = inject(NotifierConfigToken);
 
   /**
    * Get the notifier configuration

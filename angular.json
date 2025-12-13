@@ -12,7 +12,7 @@
       "sourceRoot": "projects/angular-notifier/src",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "projects/angular-notifier/tsconfig.lib.json",
             "project": "projects/angular-notifier/ng-package.json"
@@ -20,13 +20,17 @@
           "configurations": {
             "production": {
               "tsConfig": "projects/angular-notifier/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/my-lib/tsconfig.lib.json"
             }
           }
         },
         "test": {
-          "builder": "@angular-builders/jest:run",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "configPath": "jest.config.json"
+            "tsConfig": "projects/angular-notifier/tsconfig.spec.json",
+            "watch": false
           }
         }
       }
@@ -37,22 +41,24 @@
       "sourceRoot": "projects/angular-notifier-demo/src",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/angular-notifier-demo",
+            "outputPath": {
+              "base": "dist/angular-notifier-demo"
+            },
             "index": "projects/angular-notifier-demo/src/index.html",
-            "main": "projects/angular-notifier-demo/src/main.ts",
-            "polyfills": "projects/angular-notifier-demo/src/polyfills.ts",
+            "polyfills": [
+              "projects/angular-notifier-demo/src/polyfills.ts"
+            ],
             "tsConfig": "projects/angular-notifier-demo/tsconfig.app.json",
             "assets": ["projects/angular-notifier-demo/src/favicon.ico", "projects/angular-notifier-demo/src/assets"],
             "styles": ["projects/angular-notifier-demo/src/styles.scss"],
             "scripts": [],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "projects/angular-notifier-demo/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -65,15 +71,13 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "namedChunks": false,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "namedChunks": false
             }
           },
           "defaultConfiguration": ""
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
             "buildTarget": "angular-notifier-demo:build"
           },

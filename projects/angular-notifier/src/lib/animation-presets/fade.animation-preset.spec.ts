@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { NotifierAnimationPresetKeyframes } from '../models/notifier-animation.model';
 import { NotifierConfig } from '../models/notifier-config.model';
 import { fade } from './fade.animation-preset';

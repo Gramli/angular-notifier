@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest';
+
 import { NotifierConfig } from './notifier-config.model';
 
 /**
