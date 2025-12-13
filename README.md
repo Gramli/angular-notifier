@@ -11,7 +11,7 @@
 
 [Features](#features) • [Installation](#installation) • [Quick Start](#quick-start) • [Themes](#themes) • [API](#api) • [Customization](#customization)
 
-![Angular Notifier Animated Preview](/docs/angular-notifier-preview.gif)
+![Angular Notifier Animated Preview](https://raw.githubusercontent.com/Gramli/angular-notifier/develop/docs/angular-notifier-preview.gif)
 
 </div>
 
