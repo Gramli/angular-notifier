@@ -84,6 +84,7 @@ import { NotifierModule } from 'gramli-angular-notifier';
 })
 export class AppModule { }
 ```
+> **Note**: This library currently requires NgModule-based applications and is not yet compatible with standalone components.
 
 ### 2. Add the notifier container
 
@@ -113,9 +114,6 @@ Import the styles in your global styles file (`styles.scss` or `styles.css`):
 @use 'gramli-angular-notifier/styles/themes/theme-material';
 @use 'gramli-angular-notifier/styles/types/type-success';
 @use 'gramli-angular-notifier/styles/types/type-error';
-
-// Or use a complete theme bundle (recommended)
-@use 'gramli-angular-notifier/styles/themes/theme-material-complete';
 ```
 
 > **Note**: The deprecated `@import` syntax still works but will show Sass deprecation warnings. We recommend using `@use` to avoid warnings in your build output.
