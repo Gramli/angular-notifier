@@ -1,5 +1,5 @@
 {
-  "name": "angular-notifier",
+  "name": "gramli-angular-notifier",
   "sideEffects": [
     "*.scss",
     "*.css"
