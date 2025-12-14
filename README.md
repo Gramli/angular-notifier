@@ -91,7 +91,7 @@ export class AppModule { }
 
 > **Important**: As of version 21.1.x, you must use `NotifierModule.withConfig()` even for default configuration. Simply importing `NotifierModule` without calling `withConfig()` will not provide the required services.
 
-#### For Standalone Applications
+#### For Standalone Components
 
 Use the `provideNotifier()` function in your application configuration:
 
@@ -133,7 +133,7 @@ Add the `<notifier-container>` component to your app component template:
 export class AppComponent { }
 ```
 
-#### For Standalone Applications
+#### For Standalone Components
 
 Add the `<notifier-container>` component to your app component template and import `NotifierModule` in components that display notifications:
 
@@ -595,7 +595,7 @@ If you're upgrading from an earlier version and see errors like "No provider for
 })
 ```
 
-This change was made to support proper configuration in standalone applications and ensure consistent behavior across different application architectures.
+This change was made to support proper configuration in standalone components and ensure consistent behavior across different application architectures.
 
 ## Credits
 
