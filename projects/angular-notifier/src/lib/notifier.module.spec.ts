@@ -11,7 +11,7 @@ import { NotifierService } from './services/notifier.service';
 describe('Notifier Module', () => {
   it('should instantiate', () => {
     TestBed.configureTestingModule({
-      imports: [NotifierModule],
+      imports: [NotifierModule.withConfig()],
     });
     const service: NotifierService = TestBed.inject(NotifierService);
 
@@ -20,7 +20,7 @@ describe('Notifier Module', () => {
 
   it('should instantiate with default options', () => {
     TestBed.configureTestingModule({
-      imports: [NotifierModule],
+      imports: [NotifierModule.withConfig()],
     });
     const service: NotifierService = TestBed.inject(NotifierService);
 

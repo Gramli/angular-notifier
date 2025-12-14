@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule, Provider } from '@angular/core';
 
 import { NotifierContainerComponent } from './components/notifier-container.component';
 import { NotifierNotificationComponent } from './components/notifier-notification.component';
@@ -35,23 +35,57 @@ export function notifierDefaultConfigFactory(): NotifierConfig {
 }
 
 /**
+ * Provide notifier configuration for standalone applications
+ *
+ * This function should be used in the application bootstrap providers (main.ts)
+ * to configure the notifier globally. Import NotifierModule in components that need it.
+ *
+ * @example
+ * ```typescript
+ * // main.ts
+ * import { bootstrapApplication } from '@angular/platform-browser';
+ * import { provideNotifier } from 'angular-notifier';
+ *
+ * bootstrapApplication(AppComponent, {
+ *   providers: [provideNotifier({ theme: 'material' })]
+ * });
+ *
+ * @Component({
+ *   standalone: true,
+ *   imports: [NotifierModule],  // Just import, config comes from bootstrap
+ * })
+ * export class AppComponent {}
+ * ```
+ *
+ * @param   [options={}] - Custom notifier options
+ * @returns - Array of providers for the notifier configuration
+ */
+export function provideNotifier(options: NotifierOptions = {}): Provider[] {
+  return [
+    NotifierAnimationService,
+    NotifierService,
+    NotifierQueueService,
+    {
+      provide: NotifierOptionsToken,
+      useValue: options,
+    },
+    {
+      deps: [NotifierOptionsToken],
+      provide: NotifierConfigToken,
+      useFactory: notifierCustomConfigFactory,
+    },
+  ];
+}
+
+
+
+/**
  * Notifier module
  */
 @NgModule({
   declarations: [NotifierContainerComponent, NotifierNotificationComponent],
   exports: [NotifierContainerComponent],
-  imports: [CommonModule],
-  providers: [
-    NotifierAnimationService,
-    NotifierService,
-    NotifierQueueService,
-
-    // Provide the default notifier configuration if just the module is imported
-    {
-      provide: NotifierConfigToken,
-      useFactory: notifierDefaultConfigFactory,
-    },
-  ],
+  imports: [CommonModule]
 })
 export class NotifierModule {
   /**
@@ -64,6 +98,11 @@ export class NotifierModule {
     return {
       ngModule: NotifierModule,
       providers: [
+        // Provide the services
+        NotifierAnimationService,
+        NotifierService,
+        NotifierQueueService,
+        
         // Provide the options itself upfront (as we need to inject them as dependencies -- see below)
         {
           provide: NotifierOptionsToken,
