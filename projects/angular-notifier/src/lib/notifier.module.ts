@@ -42,7 +42,6 @@ export function notifierDefaultConfigFactory(): NotifierConfig {
  *
  * @example
  * ```typescript
- * // main.ts
  * import { bootstrapApplication } from '@angular/platform-browser';
  * import { provideNotifier } from 'angular-notifier';
  *
@@ -77,15 +76,13 @@ export function provideNotifier(options: NotifierOptions = {}): Provider[] {
   ];
 }
 
-
-
 /**
  * Notifier module
  */
 @NgModule({
   declarations: [NotifierContainerComponent, NotifierNotificationComponent],
   exports: [NotifierContainerComponent],
-  imports: [CommonModule]
+  imports: [CommonModule],
 })
 export class NotifierModule {
   /**
@@ -102,7 +99,7 @@ export class NotifierModule {
         NotifierAnimationService,
         NotifierService,
         NotifierQueueService,
-        
+
         // Provide the options itself upfront (as we need to inject them as dependencies -- see below)
         {
           provide: NotifierOptionsToken,
