@@ -55,7 +55,7 @@ export function notifierDefaultConfigFactory(): NotifierConfig {
  * })
  * export class AppComponent {}
  * ```
- * 
+ *
  * @param   [options={}] - Custom notifier options
  * @returns - Array of providers for the notifier configuration
  */
