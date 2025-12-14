@@ -1,7 +1,7 @@
 {
   "name": "gramli-angular-notifier",
   "description": "A well designed, fully animated, highly customizable, and easy-to-use notification library for your Angular application.",
-  "version": "21.0.0",
+  "version": "21.1.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -26,12 +26,17 @@
     "popup",
     "angular-component",
     "angular-library",
+    "angular-standalone",
+    "standalone",
+    "standalone-components",
+    "ngmodule",
     "typescript",
     "animated",
     "customizable"
   ],
   "scripts": {
     "build:demo": "ng build angular-notifier-demo --configuration production",
+    "build:standalone-demo": "ng build angular-notifier-standalone-demo --configuration production",
     "build:library": "rimraf dist && npm run build:library:angular && npm run build:library:sass && npm run build:library:css && npm run build:library:docs && npm run build:library:package",
     "build:library:angular": "ng build angular-notifier --configuration production",
     "build:library:css": "sass projects/angular-notifier/src:dist/angular-notifier --style=expanded",
@@ -41,6 +46,7 @@
     "lint:library": "eslint projects/angular-notifier/src/**/*.ts --max-warnings 0",
     "lint:library:fix": "eslint projects/angular-notifier/src/**/*.ts --max-warnings 0 --fix",
     "start": "ng serve angular-notifier-demo",
+    "start:standalone": "ng serve angular-notifier-standalone-demo",
     "test:library": "ng test angular-notifier",
     "test:library:watch": "ng test angular-notifier --watch",
     "test:library:upload-coverage": "codecov -f coverage/coverage-final.json"

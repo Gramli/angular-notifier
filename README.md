@@ -4,12 +4,12 @@
 
 **A fully animated, highly customizable, and easy-to-use notification library for Angular applications**
 
-[![Build & Test](https://img.shields.io/github/actions/workflow/status/Gramli/angular-notifier/ci.yml?style=flat-square&label=Build)](https://github.com/Gramli/angular-notifier/actions/workflows/ci.yml)
+[![Build & Test](https://img.shields.io/github/actions/workflow/status/Gramli/angular-notifier/build-and-test.yml?style=flat-square&label=Build)](https://github.com/Gramli/angular-notifier/actions/workflows/build-and-test.yml)
 [![npm version](https://img.shields.io/npm/v/gramli-angular-notifier?style=flat-square&logo=npm)](https://www.npmjs.com/package/gramli-angular-notifier)
 [![Angular](https://img.shields.io/badge/Angular-21.x-dd0031?style=flat-square&logo=angular)](https://angular.io)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
-[Features](#features) • [Installation](#installation) • [Quick Start](#quick-start) • [Themes](#themes) • [API](#api) • [Customization](#customization)
+[Features](#features) • [Installation](#installation) • [Quick Start](#quick-start) • [Examples](#live-examples) • [Themes](#themes) • [API](#api) • [Customization](#customization)
 
 ![Angular Notifier Animated Preview](https://raw.githubusercontent.com/Gramli/angular-notifier/develop/docs/angular-notifier-preview.gif)
 
@@ -27,6 +27,7 @@ Angular Notifier is a notification library designed to provide elegant, non-intr
 - **Type-safe** - Written in TypeScript with full type definitions
 - **Lightweight** - Zero dependencies beyond Angular itself
 - **Production-ready** - Battle-tested and actively maintained
+- **Module & Standalone support** - Works with both traditional NgModule and modern standalone components
 
 ## Features
 
@@ -64,6 +65,8 @@ npm install gramli-angular-notifier
 
 ### 1. Import the NotifierModule
 
+#### For Module-Based Applications
+
 Add the `NotifierModule` to your root module:
 
 ```typescript
@@ -71,28 +74,77 @@ import { NotifierModule } from 'gramli-angular-notifier';
 
 @NgModule({
   imports: [
-    NotifierModule,
-    // Or with custom configuration
+    // With custom configuration
     NotifierModule.withConfig({
       position: {
         horizontal: { position: 'right', distance: 12 },
         vertical: { position: 'top', distance: 12, gap: 10 }
       },
       theme: 'material'
-    })
+    }),
+    // Or with default configuration
+    NotifierModule.withConfig()
   ]
 })
 export class AppModule { }
 ```
-> **Note**: This library currently requires NgModule-based applications and is not yet compatible with standalone components.
 
-### 2. Add the notifier container
+> **Important**: As of version 21.1.x, you must use `NotifierModule.withConfig()` even for default configuration. Simply importing `NotifierModule` without calling `withConfig()` will not provide the required services.
+
+#### For Standalone Applications
+
+Use the `provideNotifier()` function in your application configuration:
+
+```typescript
+// main.ts or app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import { provideNotifier } from 'gramli-angular-notifier';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // With custom configuration
+    provideNotifier({
+      position: {
+        horizontal: { position: 'right', distance: 12 },
+        vertical: { position: 'top', distance: 12, gap: 10 }
+      },
+      theme: 'material'
+    }),
+    // Or with default configuration
+    // provideNotifier()
+  ]
+};
+```
+
+### 2. AppComponent - Add the notifier container
+
+#### For Module-Based Applications
 
 Add the `<notifier-container>` component to your app component template:
 
 ```typescript
 @Component({
   selector: 'app-root',
+  template: `
+    <router-outlet></router-outlet>
+    <notifier-container></notifier-container>
+  `
+})
+export class AppComponent { }
+```
+
+#### For Standalone Applications
+
+Add the `<notifier-container>` component to your app component template and import `NotifierModule` in components that display notifications:
+
+```typescript
+import { Component } from '@angular/core';
+import { NotifierModule } from 'gramli-angular-notifier';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [NotifierModule],  // Import for components only
   template: `
     <router-outlet></router-outlet>
     <notifier-container></notifier-container>
@@ -137,6 +189,16 @@ export class ExampleComponent {
   }
 }
 ```
+
+## Live Examples
+
+Explore complete working examples demonstrating both module-based and standalone approaches:
+
+### 📦 [Module-Based Demo](https://github.com/Gramli/angular-notifier/tree/develop/projects/angular-notifier-demo)
+Full example application using traditional NgModule architecture with `NotifierModule.withConfig()`.
+
+### ⚡ [Standalone Demo](https://github.com/Gramli/angular-notifier/tree/develop/projects/angular-notifier-standalone-demo)
+Modern standalone component example using `provideNotifier()` in application configuration.
 
 ## Themes
 
@@ -511,11 +573,33 @@ Check that animations are enabled in your configuration:
 NotifierModule.withConfig({ animations: { enabled: true } })
 ```
 
+### Breaking Change in v21.x: Module imports
+
+If you're upgrading from an earlier version and see errors like "No provider for NotifierService" or notifications not appearing:
+
+**Problem**: In v21.1.x, `NotifierModule` no longer provides services by default when imported alone.
+
+**Solution**: Update your imports to use `withConfig()`:
+
+```typescript
+// Before (v20.x and earlier)
+@NgModule({
+  imports: [NotifierModule]
+})
+
+// After (v21.1.x)
+@NgModule({
+  imports: [
+    NotifierModule.withConfig()  // Use withConfig() even for default settings
+  ]
+})
+```
+
+This change was made to support proper configuration in standalone applications and ensure consistent behavior across different application architectures.
+
 ## Credits
 
-This library is a maintained fork of [angular-notifier](https://github.com/dominique-mueller/angular-notifier) by Dominique Müller. Special thanks to the original author for creating this excellent library.
-
-Originally created by [itsdevdom](https://github.com/itsdevdom). Currently maintained by [Gramli](https://github.com/Gramli).
+Originally created by [dominique-mueller](https://github.com/itsdevdom). Currently maintained by [Gramli](https://github.com/Gramli).
 
 ## License
 

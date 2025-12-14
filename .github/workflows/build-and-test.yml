@@ -35,3 +35,6 @@ jobs:
 
       - name: Build demo
         run: npm run build:demo
+
+      - name: Build standalone demo
+        run: npm run build:standalone-demo
