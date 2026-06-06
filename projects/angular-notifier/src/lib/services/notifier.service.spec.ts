@@ -193,7 +193,7 @@ class MockNotifierQueueService extends NotifierQueueService {
   /**
    * Last action
    */
-  public lastAction: NotifierAction;
+  public lastAction!: NotifierAction;
   public actionStream = new Subject<NotifierAction>();
 
   /**

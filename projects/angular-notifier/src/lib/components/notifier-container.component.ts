@@ -73,6 +73,7 @@ export class NotifierContainerComponent implements OnDestroy {
     this.queueService = notifierQueueService;
     this.config = notifierService.getConfig();
     this.notifications = [];
+    this.tempPromiseResolver = () => undefined;
 
     // Connects this component up to the action queue, then handle incoming actions
     this.queueServiceSubscription = this.queueService.actionStream.subscribe((action: NotifierAction) => {

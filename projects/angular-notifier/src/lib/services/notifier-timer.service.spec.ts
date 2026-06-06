@@ -101,12 +101,12 @@ class MockDate extends Date {
   /**
    * Start time (at init)
    */
-  private startTime: number;
+  private startTime: number = new Date().getTime();
 
   /**
    * Elapsed time (since init)
    */
-  private elapsedTime: number;
+  private elapsedTime: number = 0;
 
   /**
    * Fast-forward the current time manually

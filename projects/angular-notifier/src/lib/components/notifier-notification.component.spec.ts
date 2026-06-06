@@ -1,4 +1,4 @@
-import { Component, DebugElement, Injectable, NO_ERRORS_SCHEMA, TemplateRef, ViewChild } from '@angular/core';
+import { Component, DebugElement, Injectable, NO_ERRORS_SCHEMA, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -1019,7 +1019,7 @@ class MockNotifierTimerService extends NotifierTimerService {
    *
    * @override
    */
-  private resolveFunction: () => void;
+  private resolveFunction: () => void = () => undefined;
 
   /**
    * Start (or resume) the timer - doing nothing here
@@ -1064,10 +1064,10 @@ class MockNotifierTimerService extends NotifierTimerService {
   }
 }
 
-@Component({ selector: 'test-cmp', template: '', standalone: false })
+@Component({ selector: 'test-cmp', template: '', changeDetection: ChangeDetectionStrategy.Eager, standalone: false })
 class TestComponent {
   @ViewChild('tpl', { static: true })
-  currentTplRef: TemplateRef<any>;
+  currentTplRef!: TemplateRef<any>;
 }
 
 function createTestComponent(template: string): ComponentFixture<TestComponent> {

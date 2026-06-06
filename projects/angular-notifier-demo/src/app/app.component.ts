@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, TemplateRef, ViewChild } from '@angular/core';
 import { NotifierService } from 'angular-notifier';
 
 /**
@@ -11,10 +11,11 @@ import { NotifierService } from 'angular-notifier';
   selector: 'app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: false
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class AppComponent {
-  @ViewChild('customTemplate', { static: true }) customNotificationTmpl;
+  @ViewChild('customTemplate', { static: true }) customNotificationTmpl!: TemplateRef<unknown>;
 
   /**
    * Notifier service

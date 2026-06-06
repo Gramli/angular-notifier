@@ -17,7 +17,7 @@ export const appConfig: ApplicationConfig = {
           gap: 10,
         },
       },
-      theme: 'primeng',
+      theme: 'material',
     }),
   ],
 };

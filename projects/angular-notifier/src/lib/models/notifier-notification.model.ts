@@ -27,12 +27,12 @@ export class NotifierNotification {
    * The template to customize
    * the appearance of the notification
    */
-  public template?: TemplateRef<any> = null;
+  public template?: TemplateRef<any>;
 
   /**
    * Component reference of this notification, created and set during creation time
    */
-  public component: NotifierNotificationComponent;
+  public component!: NotifierNotificationComponent;
 
   /**
    * Constructor
@@ -40,14 +40,13 @@ export class NotifierNotification {
    * @param options Notifier options
    */
   public constructor(options: NotifierNotificationOptions) {
-    Object.assign(this, options);
-
     // If not set manually, we have to create a unique notification ID by ourselves. The ID generation relies on the current browser
     // datetime in ms, in praticular the moment this notification gets constructed. Concurrency, and thus two IDs being the exact same,
     // is not possible due to the action queue concept.
-    if (options.id === undefined) {
-      this.id = `ID_${new Date().getTime()}`;
-    }
+    this.id = options.id ?? `ID_${new Date().getTime()}`;
+    this.type = options.type;
+    this.message = options.message;
+    this.template = options.template;
   }
 }
 
