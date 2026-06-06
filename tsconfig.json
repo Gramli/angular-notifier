@@ -4,6 +4,7 @@
     "baseUrl": "./",
     "ignoreDeprecations": "6.0",
     "outDir": "./dist/out-tsc",
+    "rootDir": "./projects",
     "sourceMap": true,
     "esModuleInterop": true,
     "declaration": false,
@@ -21,7 +22,6 @@
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
   }
 }

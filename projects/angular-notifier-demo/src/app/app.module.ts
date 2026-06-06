@@ -19,7 +19,7 @@ const customNotifierOptions: NotifierOptions = {
       gap: 10,
     },
   },
-  theme: 'material',
+  theme: 'primeng',
   behaviour: {
     autoHide: false,
     onClick: false,
