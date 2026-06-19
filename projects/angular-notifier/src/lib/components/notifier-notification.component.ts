@@ -37,7 +37,7 @@ export class NotifierNotificationComponent implements AfterViewInit {
    * Input: Notification object, contains all details necessary to construct the notification
    */
   @Input()
-  public notification: NotifierNotification;
+  public notification!: NotifierNotification;
 
   /**
    * Output: Ready event, handles the initialization success by emitting a reference to this notification component
@@ -114,6 +114,8 @@ export class NotifierNotificationComponent implements AfterViewInit {
     this.animationService = notifierAnimationService;
     this.renderer = renderer;
     this.element = elementRef.nativeElement;
+    this.elementHeight = 0;
+    this.elementWidth = 0;
     this.elementShift = 0;
   }
 

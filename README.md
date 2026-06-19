@@ -53,6 +53,7 @@ npm install gramli-angular-notifier
 
 | Angular Notifier | Angular |
 | ---------------- | ------- |
+| `22.x`           | `22.x`  |
 | `21.x`           | `21.x`  |
 | `18.x`           | `20.x`  |
 | `17.x`           | `19.x`  |

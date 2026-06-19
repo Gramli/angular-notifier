@@ -66,6 +66,11 @@ export class NotifierQueueService {
       return; // Skip (the queue can now go drink a coffee as it has nothing to do anymore)
     }
     this.isActionInProgress = true;
-    this.actionStream.next(this.actionQueue.shift()); // Push next action to the stream, and remove the current action from the queue
+    const nextAction: NotifierAction | undefined = this.actionQueue.shift();
+    if (nextAction === undefined) {
+      this.isActionInProgress = false;
+      return;
+    }
+    this.actionStream.next(nextAction); // Push next action to the stream, and remove the current action from the queue
   }
 }

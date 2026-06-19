@@ -34,6 +34,8 @@ export class NotifierTimerService {
   public constructor() {
     this.now = 0;
     this.remaining = 0;
+    this.timerId = 0;
+    this.finishPromiseResolver = () => undefined;
   }
 
   /**
